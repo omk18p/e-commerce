@@ -1,178 +1,216 @@
-## MERN Ecommerce: A Seamless Shopping Experience Powered by the MERN Stack, Redux Toolkit, and Material UI
+# NovaMart: Modern E-commerce Platform
 
-### Also try -> [https://mernchat.in](https://mernchat.in)
-### ```Note✨: I have another amazing project on``` [end-to-end-encrypted-chat-application](https://github.com/RishiBakshii/mern-chat) ```using Next.js, Prisma, Postgresql, Express, Socket.io.```
+![NovaMart Banner](https://github.com/omk18p/e-commerce/blob/main/frontend/src/assets/images/banner3.jpg?raw=true)
 
-**MERN Ecommerce** is a full-stack application designed to transform your online shopping experience. Built with the MERN stack (MongoDB, Express.js, React, Node.js), it leverages Redux Toolkit for efficient state management and Material UI for a sleek, user-friendly interface. This project offers a robust platform for both users and admins, packed with essential features for a seamless experience.
+## 🚀 Live Demo
 
-![ecommerce-homepage](https://github.com/RishiBakshii/mern-ecommerce/blob/main/frontend/src/assets/images/front.png?raw=true)
-<!-- ![ecommerce-banner](https://github.com/RishiBakshii/mern-ecommerce/blob/main/frontend/src/assets/images/banner4.jpg?raw=true) -->
-![ecommerce-banner](https://github.com/RishiBakshii/mern-ecommerce/blob/main/frontend/src/assets/images/banner3.jpg?raw=true)
+- **Frontend**: [https://e-commerce-orpin-alpha.vercel.app](https://e-commerce-orpin-alpha.vercel.app)
+- **Backend**: [https://e-commerce-5rkc.onrender.com](https://e-commerce-5rkc.onrender.com)
 
+## ✨ About NovaMart
 
-# **Features**
+**NovaMart** is a cutting-edge full-stack e-commerce platform built with the MERN stack (MongoDB, Express.js, React, Node.js). It features a sophisticated dark theme with glassmorphism design, advanced search capabilities, and modern user experience powered by Redux Toolkit and Material UI.
 
-### **User:**
-- **Product Reviews:**
-  - Write, edit, and delete reviews.
-  - Instant updates on ratings and star percentages.
-  
-- **Wishlist:**
-  - Add, remove, and annotate products with personalized notes.
-  
-- **Order Management:**
-  - Create new orders and view order history.
-  
-- **Profile Management:**
-  - Manage email, username, and multiple addresses.
-  
-- **Shopping Cart:**
-  - Add products, adjust quantities, and view subtotals.
+## 🛍️ Features
 
-### **Admin:**
-- **Product Management:**
-  - Add, edit, delete, and soft-delete products.
-  - Manage product attributes like name and stock.
-  
-- **Order Management:**
-  - View and update order details and status.
+### 🎯 **Advanced Search & Discovery**
+- **Real-time Search**: Instant product filtering as you type
+- **Multi-field Search**: Search by product name, brand, and category
+- **Price Range Filter**: Interactive slider for price-based filtering
+- **URL Synchronization**: Shareable search results with URL parameters
+- **Smart Suggestions**: Product recommendations based on user behavior
 
-### **Security & User Experience:**
-- **Secure Authentication:**
-  - Login, signup, OTP verification, password reset, and logout.
+### 🛒 **Shopping Experience**
+- **Product Quick View**: Modal preview without leaving the product grid
+- **Floating Cart Widget**: Always-visible cart summary with quick checkout
+- **Wishlist Management**: Add/remove products with personalized notes
+- **Advanced Cart**: Quantity management, subtotals, and secure checkout
+- **Order Tracking**: Complete order history and status updates
 
-- **Intuitive Interface:**
-  - Powered by Material UI for a visually appealing and user-friendly experience.
+### 👤 **User Management**
+- **Secure Authentication**: Login, signup, OTP verification, password reset
+- **Profile Management**: Update email, username, and multiple addresses
+- **Review System**: Write, edit, and delete product reviews with ratings
+- **Personalized Experience**: User-specific recommendations and preferences
 
-### **Scalability:**
-- **Built for Growth:**
-  - Scalable architecture to handle increasing user demands.
+### 🎨 **Modern UI/UX**
+- **Dark Theme**: Sophisticated dark mode with glassmorphism effects
+- **Responsive Design**: Optimized for all devices and screen sizes
+- **Smooth Animations**: Framer Motion powered transitions and interactions
+- **High Contrast**: Excellent readability with modern typography
+- **Glassmorphism**: Beautiful frosted glass effects throughout the interface
 
+### 🔧 **Admin Features**
+- **Product Management**: Add, edit, delete, and soft-delete products
+- **Inventory Control**: Manage stock levels and product attributes
+- **Order Management**: View and update order status and details
+- **User Management**: Monitor user activities and account status
 
-# **Project Setup**
+### 🛡️ **Security & Performance**
+- **JWT Authentication**: Secure token-based authentication
+- **Email Verification**: OTP-based account verification
+- **Password Reset**: Secure password recovery via email
+- **CORS Protection**: Cross-origin resource sharing security
+- **Health Monitoring**: Dedicated health check endpoints for uptime
+
+## 🛠️ Tech Stack
+
+### Frontend
+- **React 18** - Modern UI library
+- **Redux Toolkit** - State management
+- **Material UI** - Component library
+- **Framer Motion** - Animations
+- **React Router** - Navigation
+- **Axios** - HTTP client
+
+### Backend
+- **Node.js** - Runtime environment
+- **Express.js** - Web framework
+- **MongoDB** - Database
+- **Mongoose** - ODM
+- **JWT** - Authentication
+- **Nodemailer** - Email service
+
+### Deployment
+- **Vercel** - Frontend hosting
+- **Render** - Backend hosting
+- **MongoDB Atlas** - Cloud database
+
+## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js ( version v21.1.0 or later )
-- MongoDB installed and running locally
+- Node.js (v18 or later)
+- MongoDB (local or Atlas)
+- Git
 
-### Clone the project
+### Installation
 
+1. **Clone the repository**
 ```bash
-  git clone https://github.com/RishiBakshii/mern-ecommerce.git
+   git clone https://github.com/omk18p/e-commerce.git
+   cd e-commerce
 ```
 
-### Navigate to the project directory
-
+2. **Install dependencies**
 ```bash
-  cd mern-ecommerce
-```
-
-### Install dependencies for frontend and backend separately
-**Tip:** To efficiently install dependencies for both frontend and backend simultaneously, use split terminals.
-
-Install frontend dependencies
-```bash
-cd frontend
+   # Install backend dependencies
+   cd backend
+npm install
+   
+   # Install frontend dependencies
+   cd ../frontend
 npm install
 ```
 
-Install backend dependencies
+3. **Environment Setup**
 
-```bash
-cd backend
-npm install
-```
-
-
-### Environment Variables
-**Backend**
-- Create a `.env` file in the `backend` directory.
-- Add the following variables with appropriate values
-```bash
-# Database connection string
-MONGO_URI="mongodb://localhost:27017/your-database-name"
-
-# Frontend URL (adjust if needed)
+   **Backend (.env)**
+   ```env
+   MONGO_URI="mongodb://localhost:27017/novamart"
 ORIGIN="http://localhost:3000"
-
-# Email credentials for sending password resets and OTPs
 EMAIL="your-email@example.com"
 PASSWORD="your-email-password"
-
-# Token and cookie expiration settings
-LOGIN_TOKEN_EXPIRATION="30d"  # Days
-OTP_EXPIRATION_TIME="120000"  # Milliseconds
-PASSWORD_RESET_TOKEN_EXPIRATION="2m"  # Minutes
-COOKIE_EXPIRATION_DAYS="30"    # Days
-
-# Secret key for jwt security
+   LOGIN_TOKEN_EXPIRATION="30d"
+   OTP_EXPIRATION_TIME="120000"
+   PASSWORD_RESET_TOKEN_EXPIRATION="2m"
+   COOKIE_EXPIRATION_DAYS="30"
 SECRET_KEY="your-secret-key"
-
-# Environment (production/development)
-PRODUCTION="false" # Initially set to false for development
+   PRODUCTION="false"
 ```
 
-**Frontend**
-- Create a `.env` file in the `frontend` directory
-- Add the following variable:
-```bash
-# Backend URL (adjust if needed)
+   **Frontend (.env)**
+   ```env
 REACT_APP_BASE_URL="http://localhost:8000" 
 ```
 
-**Important**
-- Replace all placeholders (e.g., your_database_name, your_email) with your actual values.
-- Exclude the `.env` file from version control to protect sensitive information.
-
-### Data seeding
-- **Get started quickly with pre-populated data**: Populate your database with sample users, products, reviews, and carts, enabling you to test functionalities without manual data entry.
-
-**Steps**:
-- Open a new terminal window.
-- Navigate to the `backend` directory: `cd backend`
-- Run the seeding script: `npm run seed` ( This script executes the `seed.js` file within the `seed` subdirectory equivalent to running `node seed/seed.js` )
-### Running Development Servers
-
-**Important:**
-
-- **Separate terminals**: Run the commands in separate terminal windows or use `split terminal` to avoid conflicts.
-- **Nodemon required**: Ensure you have `nodemon` installed globally to run the backend development servers using `npm run dev`. You can install it globally using `npm install -g nodemon`.
-
-#### Start the backend server
-- Navigate to the `backend` directory: `cd backend`
-- Start the server: `npm run dev` (or npm start)
-- You should see a message indicating the server is running, usually on port 8000.
-     
-#### Start the frontend server:
-- Navigate to the `frontend` directory: `cd frontend`
-- Start the server: `npm start`
-- You should see a message indicating the server is running, usually on port 3000.
-
-### Login with demo account (Optional)
-- After successfully seeding the database, you can now explore the application's functionalities using pre-populated sample data.
-- here are the `login credentials`
+4. **Seed the database**
 ```bash
-  email: demo@gmail.com
-  pass: helloWorld@123
-```
+   cd backend
+   npm run seed
+   ```
 
-- **Please Note**: While the demo account provides a convenient way to explore many features, it has some limitations:
-    - **Password Reset and OTP Verification**: Due to security reasons, the demo account uses a non-real email address. Therefore, password reset and OTP verification functionalities are not available for this account.
+5. **Start development servers**
+   ```bash
+   # Start backend (Terminal 1)
+   cd backend
+   npm run dev
+   
+   # Start frontend (Terminal 2)
+   cd frontend
+   npm start
+   ```
 
-    **What this means**:
-    - You cannot request a password reset or receive verification codes on the demo email address.
-    - To test password reset and OTP verification flows, you need to create a genuine account with a valid email address.
-
-    **What to do?**
-    - If you're primarily interested in exploring other functionalities like wishlist, cart, and order history, the demo account is sufficient.
-    - To test password reset and OTP verification, create a personal account with a valid email address.
-### Accessing the Application
-Once both servers are running, you can access them at the following URL's:
+6. **Access the application**
+   - Frontend: http://localhost:3000
 - Backend: http://localhost:8000
-- Frontend: http://localhost:3000
 
-## **Bonus**
-Don't forget to star the repository and share your feedback!✨
+### Demo Account
+- **Email**: demo@gmail.com
+- **Password**: helloWorld@123
 
-## Authors
-- [@RishiBakshii](https://github.com/RishiBakshii)
+## 📱 Features Showcase
+
+### 🔍 **Advanced Search**
+- Real-time product filtering
+- Multi-criteria search (name, brand, category)
+- Price range slider
+- URL-synchronized search results
+
+### 🛍️ **Shopping Features**
+- Product quick view modal
+- Floating cart summary widget
+- Wishlist with notes
+- Advanced cart management
+- Secure checkout process
+
+### 🎨 **Modern Design**
+- Dark theme with glassmorphism
+- Responsive layout
+- Smooth animations
+- High contrast typography
+- Professional branding
+
+### 🔧 **Admin Panel**
+- Product management dashboard
+- Order tracking system
+- User management tools
+- Inventory control
+
+## 🌟 Key Highlights
+
+- **Real-time Search**: Instant product filtering without page reloads
+- **Modern UI**: Sophisticated dark theme with glassmorphism effects
+- **Mobile Responsive**: Optimized for all devices
+- **Secure Authentication**: JWT-based security with email verification
+- **Scalable Architecture**: Built for growth and performance
+- **Production Ready**: Deployed on Vercel and Render with health monitoring
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👨‍💻 Author
+
+**Omkar Patil**
+- GitHub: [@omk18p](https://github.com/omk18p)
+- Live Demo: [NovaMart](https://e-commerce-orpin-alpha.vercel.app)
+
+## 🙏 Acknowledgments
+
+- Material UI for the component library
+- Framer Motion for animations
+- Redux Toolkit for state management
+- MongoDB for the database
+- Vercel and Render for hosting
+
+---
+
+⭐ **Star this repository if you found it helpful!**

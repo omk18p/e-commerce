@@ -42,7 +42,7 @@ export const Signup = () => {
   
   useEffect(()=>{
     if(status==='fullfilled'){
-      toast.success("Welcome! Verify your email to start shopping on mern-ecommerce.")
+      toast.success("Welcome! Verify your email to start shopping on NovaMart.")
       reset()
     }
     return ()=>{
@@ -59,73 +59,303 @@ export const Signup = () => {
   }
 
   return (
-    <Stack width={'100vw'} height={'100vh'} flexDirection={'row'} sx={{overflowY:"hidden"}}>
+    <Stack 
+      width={'100vw'} 
+      height={'100vh'} 
+      flexDirection={'row'} 
+      sx={{
+        overflowY:"hidden",
+        background: 'linear-gradient(135deg, #0F0F23 0%, #1A1A2E 100%)',
+        position: 'relative'
+      }}
+    >
+      {/* Animated background particles */}
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 50%)',
+          zIndex: 0
+        }}
+      />
 
       {
         !is900 &&
-
-        <Stack bgcolor={'black'} flex={1} justifyContent={'center'} >
-          <Lottie animationData={ecommerceOutlookAnimation}/>
+        <Stack 
+          flex={1} 
+          justifyContent={'center'} 
+          alignItems={'center'}
+          sx={{
+            background: 'rgba(26, 26, 46, 0.3)',
+            backdropFilter: 'blur(20px)',
+            borderRight: '1px solid rgba(255, 255, 255, 0.1)',
+            position: 'relative',
+            zIndex: 1
+          }}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <Lottie animationData={ecommerceOutlookAnimation}/>
+          </motion.div>
         </Stack>
-        
-        }
+      }
 
-        <Stack flex={1} justifyContent={'center'} alignItems={'center'}>
-
-              <Stack flexDirection={'row'} justifyContent={'center'} alignItems={'center'}>
-                  <Stack rowGap={'.4rem'}>
-                    <Typography variant='h2' sx={{wordBreak:"break-word"}} fontWeight={600}>Mern Shop</Typography>
-                    <Typography alignSelf={'flex-end'} color={'GrayText'} variant='body2'>- Shop Anything</Typography>
-                  </Stack>
-
+      <Stack 
+        flex={1} 
+        justifyContent={'center'} 
+        alignItems={'center'}
+        sx={{ position: 'relative', zIndex: 2 }}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          <Stack 
+            sx={{
+              background: 'rgba(26, 26, 46, 0.8)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              borderRadius: 4,
+              p: 4,
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+              minWidth: is480 ? '95vw' : '28rem',
+              maxWidth: '28rem'
+            }}
+          >
+            <Stack flexDirection={'row'} justifyContent={'center'} alignItems={'center'} mb={4}>
+              <Stack rowGap={'.4rem'} alignItems={'center'}>
+                <Typography 
+                  variant='h2' 
+                  sx={{
+                    wordBreak:"break-word",
+                    fontWeight: 800,
+                    background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
+                    backgroundClip: 'text',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    textAlign: 'center'
+                  }}
+                >
+                  NovaMart
+                </Typography>
+                <Typography 
+                  alignSelf={'center'} 
+                  sx={{
+                    color: '#94A3B8',
+                    fontWeight: 500,
+                    fontSize: '1.1rem'
+                  }} 
+                  variant='body2'
+                >
+                  - Shop Anything
+                </Typography>
               </Stack>
+            </Stack>
 
-                <Stack mt={4} spacing={2} width={is480?"95vw":'28rem'} component={'form'} noValidate onSubmit={handleSubmit(handleSignup)}>
+            <Stack spacing={3} component={'form'} noValidate onSubmit={handleSubmit(handleSignup)}>
+              <MotionConfig whileHover={{y:-5}}>
+                <motion.div>
+                  <TextField 
+                    fullWidth 
+                    {...register("name",{required:"Username is required"})} 
+                    placeholder='Username'
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        background: 'rgba(15, 15, 35, 0.6)',
+                        backdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#8B5CF6',
+                        },
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#8B5CF6',
+                          borderWidth: 2,
+                        },
+                        '& .MuiInputBase-input': {
+                          color: '#FFFFFF',
+                        },
+                        '& .MuiInputBase-input::placeholder': {
+                          color: '#94A3B8',
+                        },
+                      },
+                    }}
+                  />
+                  {errors.name && <FormHelperText sx={{mt:1, color: '#EF4444'}} error>{errors.name.message}</FormHelperText>}
+                </motion.div>
 
-                    <MotionConfig whileHover={{y:-5}}>
+                <motion.div>
+                  <TextField 
+                    fullWidth 
+                    {...register("email",{required:"Email is required",pattern:{value:/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g,message:"Enter a valid email"}})} 
+                    placeholder='Email'
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        background: 'rgba(15, 15, 35, 0.6)',
+                        backdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#8B5CF6',
+                        },
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#8B5CF6',
+                          borderWidth: 2,
+                        },
+                        '& .MuiInputBase-input': {
+                          color: '#FFFFFF',
+                        },
+                        '& .MuiInputBase-input::placeholder': {
+                          color: '#94A3B8',
+                        },
+                      },
+                    }}
+                  />
+                  {errors.email && <FormHelperText sx={{mt:1, color: '#EF4444'}} error>{errors.email.message}</FormHelperText>}
+                </motion.div>
 
-                      <motion.div>
-                        <TextField fullWidth {...register("name",{required:"Username is required"})} placeholder='Username'/>
-                        {errors.name && <FormHelperText error>{errors.name.message}</FormHelperText>}
-                      </motion.div>
+                <motion.div>
+                  <TextField 
+                    type='password' 
+                    fullWidth 
+                    {...register("password",{required:"Password is required",pattern:{value:/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm,message:`at least 8 characters, must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number, Can contain special characters`}})} 
+                    placeholder='Password'
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        background: 'rgba(15, 15, 35, 0.6)',
+                        backdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#8B5CF6',
+                        },
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#8B5CF6',
+                          borderWidth: 2,
+                        },
+                        '& .MuiInputBase-input': {
+                          color: '#FFFFFF',
+                        },
+                        '& .MuiInputBase-input::placeholder': {
+                          color: '#94A3B8',
+                        },
+                      },
+                    }}
+                  />
+                  {errors.password && <FormHelperText sx={{mt:1, color: '#EF4444'}} error>{errors.password.message}</FormHelperText>}
+                </motion.div>
+                
+                <motion.div>
+                  <TextField 
+                    type='password' 
+                    fullWidth 
+                    {...register("confirmPassword",{required:"Confirm Password is required",validate:(value,fromValues)=>value===fromValues.password || "Passwords doesn't match"})} 
+                    placeholder='Confirm Password'
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        background: 'rgba(15, 15, 35, 0.6)',
+                        backdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#8B5CF6',
+                        },
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#8B5CF6',
+                          borderWidth: 2,
+                        },
+                        '& .MuiInputBase-input': {
+                          color: '#FFFFFF',
+                        },
+                        '& .MuiInputBase-input::placeholder': {
+                          color: '#94A3B8',
+                        },
+                      },
+                    }}
+                  />
+                  {errors.confirmPassword && <FormHelperText sx={{mt:1, color: '#EF4444'}} error>{errors.confirmPassword.message}</FormHelperText>}
+                </motion.div>
+              </MotionConfig>
 
-                      <motion.div>
-                        <TextField fullWidth {...register("email",{required:"Email is required",pattern:{value:/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g,message:"Enter a valid email"}})} placeholder='Email'/>
-                        {errors.email && <FormHelperText error>{errors.email.message}</FormHelperText>}
-                      </motion.div>
+              <motion.div whileHover={{scale:1.02}} whileTap={{scale:0.98}}>
+                <LoadingButton 
+                  sx={{
+                    height:'3rem',
+                    background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
+                    '&:hover': {
+                      background: 'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%)',
+                    },
+                    borderRadius: 2,
+                    fontWeight: 600,
+                    fontSize: '1.1rem',
+                    boxShadow: '0 8px 16px -4px rgba(139, 92, 246, 0.3)',
+                    '&:hover': {
+                      boxShadow: '0 12px 24px -6px rgba(139, 92, 246, 0.4)',
+                    }
+                  }} 
+                  fullWidth 
+                  loading={status==='pending'} 
+                  type='submit' 
+                  variant='contained'
+                >
+                  Signup
+                </LoadingButton>
+              </motion.div>
 
-                      <motion.div>
-                        <TextField type='password' fullWidth {...register("password",{required:"Password is required",pattern:{value:/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm,message:`at least 8 characters, must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number, Can contain special characters`}})} placeholder='Password'/>
-                        {errors.password && <FormHelperText error>{errors.password.message}</FormHelperText>}
-                      </motion.div>
-                      
-                      <motion.div>
-                        <TextField type='password' fullWidth {...register("confirmPassword",{required:"Confirm Password is required",validate:(value,fromValues)=>value===fromValues.password || "Passwords doesn't match"})} placeholder='Confirm Password'/>
-                        {errors.confirmPassword && <FormHelperText error>{errors.confirmPassword.message}</FormHelperText>}
-                      </motion.div>
-                    
-                    </MotionConfig>
+              <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'} flexWrap={'wrap-reverse'} mt={2}>
+                <MotionConfig whileHover={{x:2}} whileTap={{scale:1.050}}>
+                  <motion.div>
+                    <Typography 
+                      mr={'1.5rem'} 
+                      sx={{
+                        textDecoration:"none",
+                        color:"#8B5CF6",
+                        fontWeight: 500,
+                        cursor: 'pointer',
+                        '&:hover': {
+                          color: '#A78BFA',
+                        }
+                      }} 
+                      to={'/forgot-password'} 
+                      component={Link}
+                    >
+                      Forgot password
+                    </Typography>
+                  </motion.div>
 
-                    <motion.div whileHover={{scale:1.020}} whileTap={{scale:1}}>
-                      <LoadingButton sx={{height:'2.5rem'}} fullWidth loading={status==='pending'} type='submit' variant='contained'>Signup</LoadingButton>
-                    </motion.div>
-
-                    <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'} flexWrap={'wrap-reverse'}>
-                        <MotionConfig whileHover={{x:2}} whileTap={{scale:1.050}}>
-                            <motion.div>
-                                <Typography mr={'1.5rem'} sx={{textDecoration:"none",color:"text.primary"}} to={'/forgot-password'} component={Link}>Forgot password</Typography>
-                            </motion.div>
-
-                            <motion.div>
-                                <Typography sx={{textDecoration:"none",color:"text.primary"}} to={'/login'} component={Link}>Already a member? <span style={{color:theme.palette.primary.dark}}>Login</span></Typography>
-                            </motion.div>
-                        </MotionConfig>
-                    </Stack>
-
-                </Stack>
-
-
-        </Stack>
+                  <motion.div>
+                    <Typography 
+                      sx={{
+                        textDecoration:"none",
+                        color:"#94A3B8",
+                        fontWeight: 500
+                      }} 
+                      to={'/login'} 
+                      component={Link}
+                    >
+                      Already a member?{' '}
+                      <span style={{
+                        color: '#8B5CF6',
+                        fontWeight: 600,
+                        cursor: 'pointer'
+                      }}>
+                        Login
+                      </span>
+                    </Typography>
+                  </motion.div>
+                </MotionConfig>
+              </Stack>
+            </Stack>
+          </Stack>
+        </motion.div>
+      </Stack>
     </Stack>
   )
 }

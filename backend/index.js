@@ -52,6 +52,10 @@ server.get("/",(req,res)=>{
     res.status(200).json({message:'running'})
 })
 
+server.get('/health-check', (req, res) => {
+  res.status(200).send('OK');
+});
+
 server.listen(8000,()=>{
     console.log('server [STARTED] ~ http://localhost:8000');
 })

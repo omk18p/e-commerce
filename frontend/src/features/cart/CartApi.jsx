@@ -2,10 +2,14 @@ import {axiosi} from '../../config/axios'
 
 export const addToCart=async(item)=>{
     try {
+        console.log('Sending cart request:', item)
         const res=await axiosi.post('/cart',item)
+        console.log('Cart response:', res.data)
         return res.data
     } catch (error) {
-        throw error.response.data
+        console.error('Cart API error:', error)
+        console.error('Error response:', error.response?.data)
+        throw error.response?.data || {message: 'Network error occurred'}
     }
 }
 export const fetchCartByUserId=async(id)=>{

@@ -80,8 +80,42 @@ export const ReviewItem = ({id,username,userid,comment,rating,createdAt}) => {
               <Stack component={'form'} noValidate onSubmit={handleSubmit(handleUpdateReview)} rowGap={2}>
                 <TextField multiline rows={4} {...register("comment",{required:true,value:comment})}/>
                 <Stack flexDirection={'row'} alignSelf={'flex-end'} columnGap={1} justifyContent={'center'} alignItems={'center'}>
-                  <LoadingButton size='small' type='submit' sx={{alignSelf:"flex-end"}} variant='contained'>Update</LoadingButton>
-                  <Button variant='outlined' size='small' onClick={()=>setEdit(false)} color='error'>Cancel</Button>
+                  <LoadingButton 
+                    size='small' 
+                    type='submit' 
+                    sx={{
+                      alignSelf:"flex-end",
+                      background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
+                      '&:hover': {
+                        background: 'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%)',
+                      },
+                      borderRadius: 2,
+                      fontWeight: 600,
+                      boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)',
+                      '&:hover': {
+                        boxShadow: '0 6px 16px rgba(139, 92, 246, 0.4)',
+                      }
+                    }} 
+                    variant='contained'
+                  >
+                    Update
+                  </LoadingButton>
+                  <Button 
+                    variant='outlined' 
+                    size='small' 
+                    onClick={()=>setEdit(false)} 
+                    sx={{
+                      borderColor: '#EF4444',
+                      color: '#EF4444',
+                      '&:hover': {
+                        borderColor: '#F87171',
+                        color: '#F87171',
+                        background: 'rgba(239, 68, 68, 0.1)',
+                      }
+                    }}
+                  >
+                    Cancel
+                  </Button>
                 </Stack>
               </Stack>
             ):(<Typography color='graytext'>{comment}</Typography>)

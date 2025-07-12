@@ -72,7 +72,17 @@ export const UserOrders = () => {
 
 
   return (
-    <Stack justifyContent={'center'} alignItems={'center'}>
+    <Stack 
+      sx={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%)',
+        color: '#ffffff',
+        p: 2,
+        pt: 4
+      }}
+      justifyContent={'center'} 
+      alignItems={'center'}
+    >
         {
             orderFetchStatus==='pending'?
             <Stack width={is480?'auto':'25rem'} height={'calc(100vh - 4rem)'} justifyContent={'center'} alignItems={'center'}>
@@ -85,14 +95,40 @@ export const UserOrders = () => {
                 <Stack flexDirection={'row'} columnGap={2} >
                     {
                         !is480 && <motion.div whileHover={{x:-5}} style={{alignSelf:"center"}}>
-                        <IconButton component={Link} to={"/"}><ArrowBackIcon fontSize='large'/></IconButton>
+                        <IconButton 
+                          component={Link} 
+                          to={"/"}
+                          sx={{
+                            color: '#00d4ff',
+                            '&:hover': {
+                              background: 'rgba(0, 212, 255, 0.1)',
+                              transform: 'scale(1.1)'
+                            }
+                          }}
+                        >
+                          <ArrowBackIcon fontSize='large'/>
+                        </IconButton>
                     </motion.div>
                     }
     
 
                     <Stack rowGap={1} >
-                        <Typography variant='h4' fontWeight={500}>Order history</Typography>
-                        <Typography sx={{wordWrap:"break-word"}} color={'text.secondary'}>Check the status of recent orders, manage returns, and discover similar products.</Typography>
+                        <Typography 
+                          variant='h4' 
+                          sx={{
+                            fontWeight: 700,
+                            background: 'linear-gradient(45deg, #00d4ff, #ff6b6b)',
+                            backgroundClip: 'text',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            textShadow: '0 0 20px rgba(0, 212, 255, 0.3)'
+                          }}
+                        >
+                          Order History
+                        </Typography>
+                        <Typography sx={{color: 'rgba(255, 255, 255, 0.7)', wordWrap:"break-word"}}>
+                          Check the status of recent orders, manage returns, and discover similar products.
+                        </Typography>
                     </Stack>
 
                 </Stack>
@@ -103,29 +139,49 @@ export const UserOrders = () => {
                         {/* orders mapping */}
                         {
                             orders && orders.map((order)=>(
-                                <Stack p={is480?0:2} component={is480?"":Paper} elevation={1} rowGap={2}>
+                                <Stack 
+                                  p={is480?0:2} 
+                                  component={is480?"":Paper} 
+                                  elevation={0} 
+                                  rowGap={2}
+                                  sx={{
+                                    background: 'rgba(255, 255, 255, 0.05)',
+                                    backdropFilter: 'blur(20px)',
+                                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                                    borderRadius: 3,
+                                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+                                    borderTop: '1px solid rgba(255, 255, 255, 0.2)',
+                                    borderLeft: '1px solid rgba(255, 255, 255, 0.1)',
+                                    transition: 'all 0.3s ease',
+                                    '&:hover': {
+                                      transform: 'translateY(-5px)',
+                                      boxShadow: '0 12px 40px rgba(0, 212, 255, 0.2)',
+                                      borderColor: '#00d4ff'
+                                    }
+                                  }}
+                                >
                                     
                                     {/* upper */}
                                     <Stack flexDirection={'row'} rowGap={'1rem'}  justifyContent={'space-between'} flexWrap={'wrap'}>
                                         <Stack flexDirection={'row'} columnGap={4} rowGap={'1rem'} flexWrap={'wrap'}>
                                             <Stack>
-                                                <Typography>Order Number</Typography>
-                                                <Typography color={'text.secondary'}>{order._id}</Typography>
+                                                <Typography sx={{ color: '#ffffff', fontWeight: 600 }}>Order Number</Typography>
+                                                <Typography sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>{order._id}</Typography>
                                             </Stack>
 
                                             <Stack>
-                                                <Typography>Date Placed</Typography>
-                                                <Typography color={'text.secondary'}>{new Date(order.createdAt).toDateString()}</Typography>
+                                                <Typography sx={{ color: '#ffffff', fontWeight: 600 }}>Date Placed</Typography>
+                                                <Typography sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>{new Date(order.createdAt).toDateString()}</Typography>
                                             </Stack>
 
                                             <Stack>
-                                                <Typography>Total Amount</Typography>
-                                                <Typography>${order.total}</Typography>
+                                                <Typography sx={{ color: '#ffffff', fontWeight: 600 }}>Total Amount</Typography>
+                                                <Typography sx={{ color: '#00d4ff', fontWeight: 700, fontSize: '1.1rem' }}>${order.total}</Typography>
                                             </Stack>
                                         </Stack>
 
                                         <Stack>
-                                            <Typography>Item: {order.item.length}</Typography>
+                                            <Typography sx={{ color: '#ffffff', fontWeight: 600 }}>Items: {order.item.length}</Typography>
                                         </Stack>
                                     </Stack>
 
@@ -135,31 +191,122 @@ export const UserOrders = () => {
                                         {
                                             order.item.map((product)=>(
                                                 
-                                                <Stack mt={2} flexDirection={'row'} rowGap={is768?'2rem':''} columnGap={4} flexWrap={is768?"wrap":"nowrap"}>
+                                                <Stack 
+                                                  mt={2} 
+                                                  flexDirection={'row'} 
+                                                  rowGap={is768?'2rem':''} 
+                                                  columnGap={4} 
+                                                  flexWrap={is768?"wrap":"nowrap"}
+                                                  sx={{
+                                                    background: 'rgba(255, 255, 255, 0.03)',
+                                                    borderRadius: 2,
+                                                    p: 2,
+                                                    border: '1px solid rgba(255, 255, 255, 0.05)'
+                                                  }}
+                                                >
                                                     
                                                     <Stack>
-                                                        <img style={{width:"100%",aspectRatio:is480?3/2:1/1,objectFit:"contain"}} src={product.product.images[0]} alt="" />
+                                                        <img 
+                                                          style={{
+                                                            width:"100%",
+                                                            aspectRatio:is480?3/2:1/1,
+                                                            objectFit:"contain",
+                                                            borderRadius: '8px',
+                                                            boxShadow: '0 4px 15px rgba(0, 0, 0, 0.3)'
+                                                          }} 
+                                                          src={product.product.images[0]} 
+                                                          alt="" 
+                                                        />
                                                     </Stack>
 
                                                     <Stack rowGap={1} width={'100%'}>
 
                                                         <Stack flexDirection={'row'} justifyContent={'space-between'}>
                                                             <Stack>
-                                                                <Typography variant='h6' fontSize={'1rem'} fontWeight={500}>{product.product.title}</Typography>
-                                                                <Typography variant='body1'  fontSize={'.9rem'}  color={'text.secondary'}>{product.product.brand.name}</Typography>
-                                                                <Typography color={'text.secondary'} fontSize={'.9rem'}>Qty: {product.quantity}</Typography>
+                                                                <Typography 
+                                                                  variant='h6' 
+                                                                  fontSize={'1rem'} 
+                                                                  sx={{ 
+                                                                    color: '#ffffff', 
+                                                                    fontWeight: 600 
+                                                                  }}
+                                                                >
+                                                                  {product.product.title}
+                                                                </Typography>
+                                                                <Typography 
+                                                                  variant='body1'  
+                                                                  fontSize={'.9rem'}  
+                                                                  sx={{ color: 'rgba(255, 255, 255, 0.7)' }}
+                                                                >
+                                                                  {product.product.brand.name}
+                                                                </Typography>
+                                                                <Typography sx={{ color: 'rgba(255, 255, 255, 0.7)', fontSize:'.9rem' }}>
+                                                                  Qty: {product.quantity}
+                                                                </Typography>
                                                             </Stack>
-                                                            <Typography>${product.product.price}</Typography>
+                                                            <Typography sx={{ color: '#00d4ff', fontWeight: 700, fontSize: '1.1rem' }}>
+                                                              ${product.product.price}
+                                                            </Typography>
                                                         </Stack>
 
-                                                        <Typography color={'text.secondary'}>{product.product.description}</Typography>
+                                                        <Typography sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
+                                                          {product.product.description}
+                                                        </Typography>
 
                                                         <Stack mt={2} alignSelf={is480?"flex-start":'flex-end'} flexDirection={'row'} columnGap={2} >
-                                                            <Button size='small' component={Link} to={`/product-details/${product.product._id}`} variant='outlined'>View Product</Button>
+                                                            <Button 
+                                                              size='small' 
+                                                              component={Link} 
+                                                              to={`/product-details/${product.product._id}`} 
+                                                              variant='outlined'
+                                                              sx={{
+                                                                borderColor: '#00d4ff',
+                                                                color: '#00d4ff',
+                                                                '&:hover': {
+                                                                  borderColor: '#0099cc',
+                                                                  background: 'rgba(0, 212, 255, 0.1)'
+                                                                }
+                                                              }}
+                                                            >
+                                                              View Product
+                                                            </Button>
                                                             {
                                                                 cartItems.some((cartItem)=>cartItem.product._id===product.product._id)?
-                                                                <Button  size='small' variant='contained' component={Link} to={"/cart"}>Already in Cart</Button>
-                                                                :<Button  size='small' variant='contained' onClick={()=>handleAddToCart(product.product)}>Buy Again</Button>
+                                                                <Button  
+                                                                  size='small' 
+                                                                  variant='contained' 
+                                                                  component={Link} 
+                                                                  to={"/cart"}
+                                                                  sx={{
+                                                                    background: 'linear-gradient(45deg, #ff6b6b, #ff4757)',
+                                                                    color: '#ffffff',
+                                                                    fontWeight: 600,
+                                                                    '&:hover': {
+                                                                      background: 'linear-gradient(45deg, #ff4757, #ff6b6b)',
+                                                                      transform: 'translateY(-2px)',
+                                                                      boxShadow: '0 8px 25px rgba(255, 107, 107, 0.4)'
+                                                                    }
+                                                                  }}
+                                                                >
+                                                                  Already in Cart
+                                                                </Button>
+                                                                :<Button  
+                                                                  size='small' 
+                                                                  variant='contained' 
+                                                                  onClick={()=>handleAddToCart(product.product)}
+                                                                  sx={{
+                                                                    background: 'linear-gradient(45deg, #00d4ff, #0099cc)',
+                                                                    color: '#ffffff',
+                                                                    fontWeight: 600,
+                                                                    '&:hover': {
+                                                                      background: 'linear-gradient(45deg, #0099cc, #00d4ff)',
+                                                                      transform: 'translateY(-2px)',
+                                                                      boxShadow: '0 8px 25px rgba(0, 212, 255, 0.4)'
+                                                                    }
+                                                                  }}
+                                                                >
+                                                                  Buy Again
+                                                                </Button>
                                                             }
                                                         </Stack>
 
@@ -175,7 +322,19 @@ export const UserOrders = () => {
 
                                     {/* lower */}
                                     <Stack mt={2} flexDirection={'row'} justifyContent={'space-between'}>
-                                        <Typography mb={2}>Status : {order.status}</Typography>
+                                        <Typography 
+                                          mb={2} 
+                                          sx={{ 
+                                            color: '#ffffff', 
+                                            fontWeight: 600,
+                                            background: 'linear-gradient(45deg, #00d4ff, #ff6b6b)',
+                                            backgroundClip: 'text',
+                                            WebkitBackgroundClip: 'text',
+                                            WebkitTextFillColor: 'transparent'
+                                          }}
+                                        >
+                                          Status: {order.status}
+                                        </Typography>
                                     </Stack>
                                         
                                 </Stack>
@@ -192,7 +351,21 @@ export const UserOrders = () => {
                                     <Lottie animationData={noOrdersAnimation}/>
                                 </Stack>
 
-                                <Typography textAlign={'center'} alignSelf={'center'} variant='h6' >oh! Looks like you haven't been shopping lately</Typography>
+                                <Typography 
+                                  textAlign={'center'} 
+                                  alignSelf={'center'} 
+                                  variant='h6'
+                                  sx={{
+                                    color: '#ffffff',
+                                    fontWeight: 600,
+                                    background: 'linear-gradient(45deg, #00d4ff, #ff6b6b)',
+                                    backgroundClip: 'text',
+                                    WebkitBackgroundClip: 'text',
+                                    WebkitTextFillColor: 'transparent'
+                                  }}
+                                >
+                                  Oh! Looks like you haven't been shopping lately
+                                </Typography>
 
                             </Stack>
                         }

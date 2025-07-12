@@ -1,175 +1,135 @@
+import { Box, Stack, Typography, useMediaQuery, useTheme, Rating, Checkbox, FormHelperText, Button, IconButton, Chip } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
-import { clearSelectedProduct, fetchProductByIdAsync, resetProductFetchStatus, selectProductFetchStatus, selectSelectedProduct } from '../ProductSlice'
-import { Box,Checkbox,Rating, Stack,Typography, useMediaQuery,Button,Paper} from '@mui/material'
-import { addToCartAsync, resetCartItemAddStatus, selectCartItemAddStatus, selectCartItems } from '../../cart/CartSlice'
-import { selectLoggedInUser } from '../../auth/AuthSlice'
-import { fetchReviewsByProductIdAsync,resetReviewFetchStatus,selectReviewFetchStatus,selectReviews,} from '../../review/ReviewSlice'
+import { fetchProductByIdAsync, resetProductFetchStatus, selectProductFetchStatus, selectSelectedProduct } from '../ProductSlice'
+import { useParams, useNavigate } from 'react-router-dom'
 import { Reviews } from '../../review/components/Reviews'
-import {toast} from 'react-toastify'
-import {MotionConfig, motion} from 'framer-motion'
-import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
+import { fetchReviewsByProductIdAsync, resetReviewFetchStatus, selectReviewFetchStatus, selectReviews } from '../../review/ReviewSlice'
+import { addToCartAsync, selectCartItems } from '../../cart/CartSlice'
+import { createWishlistItemAsync, deleteWishlistItemByIdAsync, selectWishlistItems } from '../../wishlist/WishlistSlice'
+import { selectLoggedInUser } from '../../auth/AuthSlice'
+import { toast } from 'react-toastify'
+import { motion, MotionConfig } from 'framer-motion'
+import { Favorite, FavoriteBorder } from '@mui/icons-material'
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
 import CachedOutlinedIcon from '@mui/icons-material/CachedOutlined';
-import Favorite from '@mui/icons-material/Favorite'
-import { createWishlistItemAsync, deleteWishlistItemByIdAsync, resetWishlistItemAddStatus, resetWishlistItemDeleteStatus, selectWishlistItemAddStatus, selectWishlistItemDeleteStatus, selectWishlistItems } from '../../wishlist/WishlistSlice'
-import { useTheme } from '@mui/material'
-import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import SwipeableViews from 'react18-swipeable-views';
-import { autoPlay } from 'react-swipeable-views-utils';
-import MobileStepper from '@mui/material/MobileStepper';
+import { MobileStepper, Button as MuiButton } from '@mui/material'
+import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material'
 import Lottie from 'lottie-react'
 import {loadingAnimation} from '../../../assets'
 
-
-const SIZES=['XS','S','M','L','XL']
-const COLORS=['#020202','#F6F6F6','#B82222','#BEA9A9','#E2BB8D']
-const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
-
+const COLORS = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF']
+const SIZES = ['S', 'M', 'L', 'XL', 'XXL']
 
 export const ProductDetails = () => {
-    const {id}=useParams()
-    const product=useSelector(selectSelectedProduct)
-    const loggedInUser=useSelector(selectLoggedInUser)
-    const dispatch=useDispatch()
-    const cartItems=useSelector(selectCartItems)
-    const cartItemAddStatus=useSelector(selectCartItemAddStatus)
-    const [quantity,setQuantity]=useState(1)
-    const [selectedSize,setSelectedSize]=useState('')
-    const [selectedColorIndex,setSelectedColorIndex]=useState(-1)
-    const reviews=useSelector(selectReviews)
-    const [selectedImageIndex,setSelectedImageIndex]=useState(0)
-    const theme=useTheme()
-    const is1420=useMediaQuery(theme.breakpoints.down(1420))
-    const is990=useMediaQuery(theme.breakpoints.down(990))
-    const is840=useMediaQuery(theme.breakpoints.down(840))
-    const is500=useMediaQuery(theme.breakpoints.down(500))
-    const is480=useMediaQuery(theme.breakpoints.down(480))
-    const is387=useMediaQuery(theme.breakpoints.down(387))
-    const is340=useMediaQuery(theme.breakpoints.down(340))
+    const {id} = useParams()
+    const navigate = useNavigate()
+    const theme = useTheme()
+    const dispatch = useDispatch()
 
-    const wishlistItems=useSelector(selectWishlistItems)
+    const is1420 = useMediaQuery(theme.breakpoints.down(1420))
+    const is990 = useMediaQuery(theme.breakpoints.down(990))
+    const is840 = useMediaQuery(theme.breakpoints.down(840))
+    const is480 = useMediaQuery(theme.breakpoints.down(480))
+    const is387 = useMediaQuery(theme.breakpoints.down(387))
+    const is340 = useMediaQuery(theme.breakpoints.down(340))
 
+    const product = useSelector(selectSelectedProduct)
+    const productFetchStatus = useSelector(selectProductFetchStatus)
+    const reviews = useSelector(selectReviews)
+    const reviewFetchStatus = useSelector(selectReviewFetchStatus)
+    const loggedInUser = useSelector(selectLoggedInUser)
+    const cartItems = useSelector(selectCartItems)
+    const wishlistItems = useSelector(selectWishlistItems)
 
+    const [selectedImageIndex, setSelectedImageIndex] = useState(0)
+    const [selectedColorIndex, setSelectedColorIndex] = useState(0)
+    const [selectedSizeIndex, setSelectedSizeIndex] = useState(0)
+    const [quantity, setQuantity] = useState(1)
+    const [activeStep, setActiveStep] = useState(0)
 
-    const isProductAlreadyInCart=cartItems.some((item)=>item.product._id===id)
-    const isProductAlreadyinWishlist=wishlistItems.some((item)=>item.product._id===id)
+    const maxSteps = product?.images?.length || 0
 
-    const productFetchStatus=useSelector(selectProductFetchStatus)
-    const reviewFetchStatus=useSelector(selectReviewFetchStatus)
+    const isProductAlreadyInCart = cartItems.some((item) => item.product._id === id)
+    const isProductAlreadyinWishlist = wishlistItems.some((item) => item.product._id === id)
 
-    const totalReviewRating=reviews.reduce((acc,review)=>acc+review.rating,0)
-    const totalReviews=reviews.length
-    const averageRating=parseInt(Math.ceil(totalReviewRating/totalReviews))
+    const averageRating = reviews.length > 0 ? reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length : 0
+    const totalReviews = reviews.length
 
-    const wishlistItemAddStatus=useSelector(selectWishlistItemAddStatus)
-    const wishlistItemDeleteStatus=useSelector(selectWishlistItemDeleteStatus)
-    
-    const navigate=useNavigate()
-    useEffect(()=>{
+    useEffect(() => {
         window.scrollTo({
-            top:0,
-            behavior:"instant"
+            top: 0,
+            behavior: "instant"
         })
-    },[])
-    
-    useEffect(()=>{
-        if(id){
-            dispatch(fetchProductByIdAsync(id))
-            dispatch(fetchReviewsByProductIdAsync(id))
-        }
-    },[id])
+    }, [])
 
-    useEffect(()=>{
+    useEffect(() => {
+        dispatch(fetchProductByIdAsync(id))
+        dispatch(fetchReviewsByProductIdAsync(id))
+    }, [id, dispatch])
 
-        if(cartItemAddStatus==='fulfilled'){
-            toast.success("Product added to cart")
-        }
-
-        else if(cartItemAddStatus==='rejected'){
-            toast.error('Error adding product to cart, please try again later')
-        }
-    },[cartItemAddStatus])
-
-    useEffect(()=>{
-        if(wishlistItemAddStatus==='fulfilled'){
-            toast.success("Product added to wishlist")
-        }
-        else if(wishlistItemAddStatus==='rejected'){
-            toast.error("Error adding product to wishlist, please try again later")
-        }
-    },[wishlistItemAddStatus])
-
-    useEffect(()=>{
-        if(wishlistItemDeleteStatus==='fulfilled'){
-            toast.success("Product removed from wishlist")
-        }
-        else if(wishlistItemDeleteStatus==='rejected'){
-            toast.error("Error removing product from wishlist, please try again later")
-        }
-    },[wishlistItemDeleteStatus])
-
-    useEffect(()=>{
-        if(productFetchStatus==='rejected'){
+    useEffect(() => {
+        if (productFetchStatus === 'rejected') {
             toast.error("Error fetching product details, please try again later")
         }
-    },[productFetchStatus])
+    }, [productFetchStatus])
 
-    useEffect(()=>{
-        if(reviewFetchStatus==='rejected'){
-            toast.error("Error fetching product reviews, please try again later")
+    useEffect(() => {
+        if (reviewFetchStatus === 'rejected') {
+            toast.error("Error fetching reviews, please try again later")
         }
-    },[reviewFetchStatus])
+    }, [reviewFetchStatus])
 
-    useEffect(()=>{
-        return ()=>{
-            dispatch(clearSelectedProduct())
+    useEffect(() => {
+        return () => {
             dispatch(resetProductFetchStatus())
             dispatch(resetReviewFetchStatus())
-            dispatch(resetWishlistItemDeleteStatus())
-            dispatch(resetWishlistItemAddStatus())
-            dispatch(resetCartItemAddStatus())
         }
-    },[])
+    }, [dispatch])
 
-    const handleAddToCart=()=>{
-        const item={user:loggedInUser._id,product:id,quantity}
-        dispatch(addToCartAsync(item))
-        setQuantity(1)
+    const handleAddToCart = () => {
+        if (!loggedInUser) {
+            navigate('/login')
+            return
+        }
+        const data = { user: loggedInUser._id, product: id }
+        dispatch(addToCartAsync(data))
+        toast.success("Product added to cart")
     }
 
-    const handleDecreaseQty=()=>{
-        if(quantity!==1){
-            setQuantity(quantity-1)
-        }
-    }
-    
-    const handleIncreaseQty=()=>{
-        if(quantity<20 && quantity<product.stockQuantity){
-            setQuantity(quantity+1)
+    const handleDecreaseQty = () => {
+        if (quantity > 1) {
+            setQuantity(quantity - 1)
         }
     }
 
-    const handleSizeSelect=(size)=>{
-        setSelectedSize(size)
+    const handleIncreaseQty = () => {
+        if (quantity < product?.stockQuantity) {
+            setQuantity(quantity + 1)
+        }
     }
 
-    const handleAddRemoveFromWishlist=(e)=>{
-        if(e.target.checked){
-            const data={user:loggedInUser?._id,product:id}
+    const handleSizeSelect = (size) => {
+        setSelectedSizeIndex(SIZES.indexOf(size))
+    }
+
+    const handleAddRemoveFromWishlist = (e) => {
+        if (!loggedInUser) {
+            navigate('/login')
+            return
+        }
+        if (e.target.checked) {
+            const data = { user: loggedInUser._id, product: id }
             dispatch(createWishlistItemAsync(data))
-        }
-
-        else if(!e.target.checked){
-            const index=wishlistItems.findIndex((item)=>item.product._id===id)
-            dispatch(deleteWishlistItemByIdAsync(wishlistItems[index]._id));
+            toast.success("Product added to wishlist")
+        } else {
+            const wishlistItem = wishlistItems.find((item) => item.product._id === id)
+            if (wishlistItem) {
+                dispatch(deleteWishlistItemByIdAsync(wishlistItem._id))
+                toast.success("Product removed from wishlist")
+            }
         }
     }
-
-    const [activeStep, setActiveStep] = React.useState(0);
-    const maxSteps = product?.images.length;
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -182,204 +142,309 @@ export const ProductDetails = () => {
     const handleStepChange = (step) => {
         setActiveStep(step);
     };
-    
 
   return (
     <>
-    {!(productFetchStatus==='rejected' && reviewFetchStatus==='rejected') && <Stack sx={{justifyContent:'center',alignItems:'center',mb:'2rem',rowGap:"2rem"}}>
+    <style>{`
+      .glass-panel {
+        background: rgba(26, 26, 46, 0.85);
+        backdrop-filter: blur(18px);
+        border-radius: 24px;
+        box-shadow: 0 8px 32px 0 rgba(139, 92, 246, 0.18), 0 1.5px 8px 0 rgba(0,0,0,0.18);
+        border: 1.5px solid rgba(139, 92, 246, 0.15);
+        transition: box-shadow 0.3s, border 0.3s;
+      }
+      .glass-panel:hover {
+        box-shadow: 0 16px 48px 0 rgba(139, 92, 246, 0.28), 0 2px 16px 0 rgba(0,0,0,0.28);
+        border: 1.5px solid #8B5CF6;
+      }
+      .glow-text {
+        color: #fff;
+        text-shadow: 0 2px 8px #8B5CF6, 0 1px 2px #000;
+      }
+      .gradient-price {
+        background: linear-gradient(90deg, #8B5CF6 0%, #A78BFA 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 800;
+        font-size: 2.2rem;
+        letter-spacing: 1px;
+      }
+      .glass-btn {
+        background: linear-gradient(90deg, #8B5CF6 0%, #A78BFA 100%);
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        padding: 12px 28px;
+        box-shadow: 0 4px 16px 0 rgba(139, 92, 246, 0.18);
+        transition: box-shadow 0.3s, transform 0.2s;
+        cursor: pointer;
+        outline: none;
+      }
+      .glass-btn:hover {
+        box-shadow: 0 8px 32px 0 #8B5CF6;
+        transform: translateY(-2px) scale(1.04);
+      }
+      .qty-btn {
+        background: rgba(139, 92, 246, 0.12);
+        color: #fff;
+        border: 1.5px solid #8B5CF6;
+        border-radius: 8px;
+        font-size: 1.2rem;
+        font-weight: 700;
+        padding: 8px 16px;
+        margin: 0 4px;
+        transition: background 0.2s, border 0.2s;
+      }
+      .qty-btn:hover {
+        background: #8B5CF6;
+        color: #fff;
+        border: 1.5px solid #A78BFA;
+      }
+      .color-dot {
+        width: 40px; height: 40px; border-radius: 50%; border: 2px solid #fff; margin: 0 6px; cursor: pointer; transition: border 0.2s, box-shadow 0.2s;
+      }
+      .color-dot.selected {
+        border: 2.5px solid #8B5CF6; box-shadow: 0 0 8px #8B5CF6;
+      }
+      .size-box {
+        border-radius: 8px;
+        width: 38px; height: 38px;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 700; font-size: 1.1rem;
+        background: rgba(139, 92, 246, 0.08);
+        color: #fff;
+        border: 1.5px solid #8B5CF6;
+        margin: 0 6px;
+        cursor: pointer;
+        transition: background 0.2s, border 0.2s;
+      }
+      .size-box.selected {
+        background: #8B5CF6;
+        color: #fff;
+        border: 2px solid #A78BFA;
+      }
+      .perk-panel {
+        background: rgba(139, 92, 246, 0.08);
+        border-radius: 14px;
+        border: 1.5px solid #8B5CF6;
+        box-shadow: 0 2px 12px 0 rgba(139, 92, 246, 0.10);
+        margin-top: 2rem;
+      }
+      .perk-panel .MuiTypography-root {
+        color: #fff;
+      }
+      .perk-panel hr {
+        border-color: #8B5CF6;
+        opacity: 0.3;
+      }
+    `}</style>
+    {!(productFetchStatus==='rejected' && reviewFetchStatus==='rejected') && 
+      <Stack sx={{
+        justifyContent:'center',
+        alignItems:'center',
+        mb:'2rem',
+        rowGap:"2rem",
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #0F0F23 0%, #1A1A2E 100%)',
+        color: '#fff',
+        width: '100%',
+        maxWidth: '100vw',
+        overflowX: 'hidden',
+        position: 'relative',
+        zIndex: 1,
+        boxSizing: 'border-box',
+      }}>
         {
             (productFetchStatus || reviewFetchStatus) === 'pending'?
-            <Stack width={is500?"35vh":'25rem'} height={'calc(100vh - 4rem)'} justifyContent={'center'} alignItems={'center'}>
+            <Stack width={is480?"35vh":'25rem'} height={'calc(100vh - 4rem)'} justifyContent={'center'} alignItems={'center'}>
                 <Lottie animationData={loadingAnimation}/>
             </Stack>
             :
-            <Stack>
-                
+            <Stack alignItems="center" width="100%">
                 {/* product details */}
-                <Stack width={is480?"auto":is1420?"auto":'88rem'} p={is480?2:0} height={is840?"auto":"50rem"} rowGap={5} mt={is840?0:5} justifyContent={'center'} mb={5} flexDirection={is840?"column":"row"} columnGap={is990?"2rem":"5rem"}>
-
+                <Stack 
+                  sx={{
+                    width: '100%',
+                    maxWidth: '1200px',
+                    mx: 'auto',
+                    p: is480 ? 1 : 4,
+                    minHeight: is840 ? 'auto' : '50rem',
+                    rowGap: 5,
+                    mt: is840 ? 0 : 5,
+                    mb: 5,
+                    flexDirection: is840 ? 'column' : 'row',
+                    columnGap: is990 ? '2rem' : '3rem',
+                    boxSizing: 'border-box',
+                    borderRadius: '24px',
+                    overflow: 'hidden',
+                    background: 'rgba(26, 26, 46, 0.85)',
+                    boxShadow: '0 8px 32px 0 rgba(139, 92, 246, 0.10)',
+                  }}
+                >
                     {/* left stack (images) */}
-                    <Stack  sx={{flexDirection:"row",columnGap:"2.5rem",alignSelf:"flex-start",height:"100%"}}>
-
+                    <Stack className="glass-panel" sx={{flexDirection:"row",columnGap:"2.5rem",alignSelf:"flex-start",height:"100%", p:3, minWidth:is840?"100%":300, maxWidth: is840 ? '100%' : 400, boxSizing: 'border-box'}}>
                         {/* image selection */}
-                        {!is1420 && <Stack sx={{display:"flex",rowGap:'1.5rem',height:"100%",overflowY:"scroll"}}>
+                        {!is1420 && <Stack sx={{display:"flex",rowGap:'1.5rem',height:"100%",overflowY:"auto", maxHeight: '420px'}}>
                             {
                                 product && product.images.map((image,index)=>(
-                                    <motion.div  whileHover={{scale:1.1}} whileTap={{scale:1}} style={{width:"200px",cursor:"pointer"}} onClick={()=>setSelectedImageIndex(index)}>
+                                    <motion.div  whileHover={{scale:1.1}} whileTap={{scale:1}} style={{width:"90px",cursor:"pointer",borderRadius:'12px',overflow:'hidden',boxShadow:selectedImageIndex===index?'0 0 12px #8B5CF6':'none',border:selectedImageIndex===index?'2px solid #8B5CF6':'none'}} onClick={()=>setSelectedImageIndex(index)}>
                                         <img style={{width:"100%",objectFit:"contain"}} src={image} alt={`${product.title} image`} />
                                     </motion.div>
                                 ))
                             }
                         </Stack>}
-                        
                         {/* selected image */}
-                        <Stack mt={is480?"0rem":'5rem'}>
+                        <Stack mt={is480?"0rem":'2rem'}>
                             {
                                 is1420?
-                                <Stack width={is480?"100%":is990?'400px':"500px"} >
-                                    <AutoPlaySwipeableViews width={'100%'} height={'100%'} axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'} index={activeStep} onChangeIndex={handleStepChange} enableMouseEvents >
-                                        {
-                                        product?.images.map((image,index) => (
-                                        <div key={index} style={{width:"100%",height:'100%'}}>
-                                            {
-                                            Math.abs(activeStep - index) <= 2 
-                                                ?
-                                                <Box component="img" sx={{width:'100%',objectFit:"contain",overflow:"hidden",aspectRatio:1/1}} src={image} alt={product?.title} />
-                                                :
-                                                null
-                                            }
-                                        </div>
-                                        ))
+                                <Stack width={is480?"100%":is990?'320px':"400px"} >
+                                    <Box sx={{ width: '100%', height: '100%' }}>
+                                        <img 
+                                            style={{
+                                                width: '100%',
+                                                objectFit: "contain",
+                                                aspectRatio: '1/1',
+                                                borderRadius: '18px',
+                                                boxShadow: '0 4px 24px #8B5CF6'
+                                            }} 
+                                            src={product?.images[activeStep]} 
+                                            alt={product?.title} 
+                                        />
+                                    </Box>
+                                    <MobileStepper 
+                                        steps={maxSteps} 
+                                        position="static" 
+                                        activeStep={activeStep} 
+                                        nextButton={
+                                            <MuiButton 
+                                                size="small" 
+                                                onClick={handleNext} 
+                                                disabled={activeStep === maxSteps - 1}
+                                            >
+                                                Next{theme.direction === 'rtl' ? (<KeyboardArrowLeft />) : (<KeyboardArrowRight />)}
+                                            </MuiButton>
+                                        } 
+                                        backButton={
+                                            <MuiButton 
+                                                size="small" 
+                                                onClick={handleBack} 
+                                                disabled={activeStep === 0}
+                                            >
+                                                {theme.direction === 'rtl' ? (<KeyboardArrowRight />) : (<KeyboardArrowLeft />)}Back
+                                            </MuiButton>
                                         }
-                                    </AutoPlaySwipeableViews>
-
-                                    <MobileStepper steps={maxSteps} position="static" activeStep={activeStep} nextButton={<Button size="small" onClick={handleNext} disabled={activeStep === maxSteps - 1} >Next{theme.direction === 'rtl' ? (<KeyboardArrowLeft />) : (<KeyboardArrowRight />)}</Button>} backButton={<Button size="small" onClick={handleBack} disabled={activeStep === 0}>{theme.direction === 'rtl' ? (<KeyboardArrowRight />) : (<KeyboardArrowLeft />)}Back</Button>}/>
+                                    />
                                 </Stack>
                                 :
                                 <div style={{width:"100%"}}>
-                                    <img style={{width:"100%",objectFit:"contain",aspectRatio:1/1}} src={product?.images[selectedImageIndex]} alt={`${product?.title} image`} />
+                                    <img style={{width:"100%",objectFit:"contain",aspectRatio:1/1,borderRadius:'18px',boxShadow:'0 4px 24px #8B5CF6'}} src={product?.images[selectedImageIndex]} alt={`${product?.title} image`} />
                                 </div>
                             }
                         </Stack>
-
                     </Stack>
-
                     {/* right stack - about product */}
-                    <Stack rowGap={"1.5rem"} width={is480?"100%":'25rem'}>
-
+                    <Stack className="glass-panel" rowGap={"1.5rem"} width={is480?"100%":'28rem'} p={4} sx={{boxSizing: 'border-box', maxWidth: is840 ? '100%' : 420}}>
                         {/* title rating price */}
                         <Stack rowGap={".5rem"}>
-
                             {/* title */}
-                            <Typography variant='h4' fontWeight={600}>{product?.title}</Typography>
-
+                            <Typography variant='h4' fontWeight={800} className="glow-text">{product?.title}</Typography>
                             {/* rating */}
                             <Stack sx={{flexDirection:"row",columnGap:is340?".5rem":"1rem",alignItems:"center",flexWrap:'wrap',rowGap:'1rem'}}>
-                                <Rating value={averageRating} readOnly/>
-                                <Typography>( {totalReviews===0?"No reviews":totalReviews===1?`${totalReviews} Review`:`${totalReviews} Reviews`} )</Typography>
-                                <Typography color={product?.stockQuantity<=10?"error":product?.stockQuantity<=20?"orange":"green"}>{product?.stockQuantity<=10?`Only ${product?.stockQuantity} left`:product?.stockQuantity<=20?"Only few left":"In Stock"}</Typography>
+                                <Rating value={averageRating} readOnly sx={{color:'#A78BFA'}}/>
+                                <Typography sx={{color:'#A78BFA',fontWeight:600}}>( {totalReviews===0?"No reviews":totalReviews===1?`${totalReviews} Review`:`${totalReviews} Reviews`} )</Typography>
+                                <Typography sx={{color:product?.stockQuantity<=10?"#EF4444":product?.stockQuantity<=20?"#F59E0B":"#10B981",fontWeight:700}}>{product?.stockQuantity<=10?`Only ${product?.stockQuantity} left`:product?.stockQuantity<=20?"Only few left":"In Stock"}</Typography>
                             </Stack>
-
                             {/* price */}
-                            <Typography variant='h5'>${product?.price}</Typography>
+                            <Typography className="gradient-price">${product?.price}</Typography>
                         </Stack>
-
                         {/* description */}
                         <Stack rowGap={".8rem"}>
-                            <Typography>{product?.description}</Typography>
-                            <hr />
+                            <Typography sx={{color:'#E0E7FF',fontWeight:500}}>{product?.description}</Typography>
+                            <hr style={{borderColor:'#8B5CF6',opacity:0.2}} />
                         </Stack>
-                        
-
                         {/* color, size and add-to-cart */}
-
                         {
                             !loggedInUser?.isAdmin &&
-                        
-                        <Stack sx={{rowGap:"1.3rem"}} width={'fit-content'}>
-
+                        <Stack sx={{ rowGap: '1.3rem', width: '100%', alignItems: 'center' }}>
                             {/* colors */}
                             <Stack flexDirection={'row'} alignItems={'center'} columnGap={is387?'5px':'1rem'} width={'fit-content'}>
-                                <Typography>Colors: </Typography>
+                                <Typography sx={{color:'#A78BFA',fontWeight:600}}>Colors: </Typography>
                                 <Stack flexDirection={'row'} columnGap={is387?".5rem":".2rem"} >
                                     {
                                         COLORS.map((color,index)=>(
-                                            <div style={{backgroundColor:"white",border:selectedColorIndex===index?`1px solid ${theme.palette.primary.dark}`:"",width:is340?"40px":"50px",height:is340?"40px":"50px",display:"flex",justifyContent:"center",alignItems:"center",borderRadius:"100%",}}>
-                                                <div onClick={()=>setSelectedColorIndex(index)} style={{width:"40px",height:"40px",border:color==='#F6F6F6'?"1px solid grayText":"",backgroundColor:color,borderRadius:"100%"}}></div>
-                                            </div>
+                                            <div className={`color-dot${selectedColorIndex===index?' selected':''}`} style={{backgroundColor:color}} onClick={()=>setSelectedColorIndex(index)}></div>
                                         ))
                                     }
                                 </Stack>
                             </Stack>
-                            
                             {/* size */}
                             <Stack flexDirection={'row'} alignItems={'center'} columnGap={is387?'5px':'1rem'} width={'fit-content'}>
-                                <Typography>Size: </Typography>
-                                <Stack flexDirection={'row'} columnGap={is387?".5rem":"1rem"}>
+                                <Typography sx={{color:'#A78BFA',fontWeight:600}}>Size: </Typography>
+                                <Stack flexDirection={'row'} columnGap={is387?".5rem":".2rem"} >
                                     {
-                                        SIZES.map((size)=>(
-                                            <motion.div onClick={()=>handleSizeSelect(size)} whileHover={{scale:1.050}} whileTap={{scale:1}} style={{border:selectedSize===size?'':"1px solid grayText",borderRadius:"8px",width:"30px",height:"30px",display:"flex",justifyContent:"center",alignItems:"center",cursor:"pointer",padding:"1.2rem",backgroundColor:selectedSize===size?"#DB4444":"whitesmoke",color:selectedSize===size?"white":""}}>
-                                                <p>{size}</p>
-                                            </motion.div>
+                                        SIZES.map((size,index)=>(
+                                            <div className={`size-box${selectedSizeIndex===index?' selected':''}`} onClick={()=>setSelectedSizeIndex(index)}>{size}</div>
                                         ))
                                     }
                                 </Stack>
                             </Stack>
-
-                            {/* quantity , add to cart and wishlist */}
-                            <Stack flexDirection={"row"} columnGap={is387?".3rem":"1.5rem"} width={'100%'} >
-                                
-                                {/* qunatity */}
-                                <Stack flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
-                                    
-                                    <MotionConfig whileHover={{scale:1.050}} whileTap={{scale:1}}>
-                                        <motion.button onClick={handleDecreaseQty}  style={{padding:"10px 15px",fontSize:"1.050rem",backgroundColor:"",color:"black",outline:"none",border:'1px solid black',borderRadius:"8px"}}>-</motion.button>
-                                        <p style={{margin:"0 1rem",fontSize:"1.1rem",fontWeight:'400'}}>{quantity}</p>
-                                        <motion.button onClick={handleIncreaseQty} style={{padding:"10px 15px",fontSize:"1.050rem",backgroundColor:"black",color:"white",outline:"none",border:'none',borderRadius:"8px"}}>+</motion.button>
-                                    </MotionConfig>
-
+                            {/* quantity */}
+                            <Stack flexDirection={'row'} alignItems={'center'} columnGap={is387?'5px':'1rem'} width={'fit-content'}>
+                                <Typography sx={{color:'#A78BFA',fontWeight:600}}>Quantity: </Typography>
+                                <Stack flexDirection={'row'} alignItems={'center'} columnGap={is387?".5rem":".2rem"} >
+                                    <button className="qty-btn" onClick={()=>setQuantity(Math.max(1,quantity-1))}>-</button>
+                                    <Typography sx={{color:'#FFFFFF',fontWeight:700,minWidth:'20px',textAlign:'center'}}>{quantity}</Typography>
+                                    <button className="qty-btn" onClick={()=>setQuantity(Math.min(product?.stockQuantity,quantity+1))}>+</button>
                                 </Stack>
-                                
-                                {/* add to cart */}
-                                {
-                                    isProductAlreadyInCart?
-                                    <button style={{padding:"10px 15px",fontSize:"1.050rem",backgroundColor:"black",color:"white",outline:"none",border:'none',borderRadius:"8px"}} onClick={()=>navigate("/cart")}>In Cart</button>
-                                    :<motion.button whileHover={{scale:1.050}} whileTap={{scale:1}} onClick={handleAddToCart} style={{padding:"10px 15px",fontSize:"1.050rem",backgroundColor:"black",color:"white",outline:"none",border:'none',borderRadius:"8px"}}>Add To Cart</motion.button>
-                                }
-
-                                {/* wishlist */}
-                                <motion.div style={{border:"1px solid grayText",borderRadius:"4px",display:"flex",justifyContent:"center",alignItems:"center"}}>
-                                    <Checkbox checked={isProductAlreadyinWishlist} onChange={(e)=>handleAddRemoveFromWishlist(e)} icon={<FavoriteBorder />} checkedIcon={<Favorite sx={{color:'red'}} />} />
-                                </motion.div>
-
-
                             </Stack>
-
+                            {/* add to cart button */}
+                            <motion.button 
+                                whileHover={{scale:1.05}} 
+                                whileTap={{scale:1}} 
+                                onClick={handleAddToCart} 
+                                className="glass-btn"
+                                disabled={product?.stockQuantity===0}
+                            >
+                                {product?.stockQuantity===0?"Out of Stock":"Add to Cart"}
+                            </motion.button>
                         </Stack>
-                        
                         }
-
-
                         {/* product perks */}
-                        <Stack mt={3} sx={{justifyContent:"center",alignItems:'center',border:"1px grayText solid",borderRadius:"7px"}}>
-                            
+                        <Stack mt={3} className="perk-panel">
                             <Stack p={2} flexDirection={'row'} alignItems={"center"} columnGap={'1rem'} width={'100%'} justifyContent={'flex-sart'}>
                                 <Box>
-                                    <LocalShippingOutlinedIcon/>
+                                    <LocalShippingOutlinedIcon sx={{color:'#A78BFA'}}/>
                                 </Box>
                                 <Stack>
-                                    <Typography>Free Delivery</Typography>
-                                    <Typography>Enter your postal for delivery availabity</Typography>
+                                    <Typography sx={{fontWeight:700}}>Free Delivery</Typography>
+                                    <Typography sx={{color:'#A78BFA'}}>Enter your postal for delivery availabity</Typography>
                                 </Stack>
                             </Stack>
                             <hr style={{width:"100%"}} />
                             <Stack p={2} flexDirection={'row'} alignItems={"center"} width={'100%'} columnGap={'1rem'} justifyContent={'flex-start'}>
                                 <Box>
-                                    <CachedOutlinedIcon/>
+                                    <CachedOutlinedIcon sx={{color:'#A78BFA'}}/>
                                 </Box>
                                 <Stack>
-                                    <Typography>Return Delivery</Typography>
-                                    <Typography>Free 30 Days Delivery Returns</Typography>
+                                    <Typography sx={{fontWeight:700}}>Return Delivery</Typography>
+                                    <Typography sx={{color:'#A78BFA'}}>Free 30 Days Delivery Returns</Typography>
                                 </Stack>
                             </Stack>
-
                         </Stack>
-
                     </Stack>
-                    
                 </Stack>
-
                 {/* reviews */}
-                <Stack width={is1420?"auto":'88rem'} p={is480?2:0}>
+                <Stack width="100%" maxWidth="1200px" mx="auto" p={is480?2:0}>
                     <Reviews productId={id} averageRating={averageRating}/>       
                 </Stack>
-            
             </Stack>
         }
-                
-    </Stack>
+      </Stack>
     }
     </>
-
   )
 }

@@ -159,10 +159,48 @@ export const Reviews = ({productId,averageRating}) => {
                     <Stack flexDirection={'row'} alignSelf={'flex-end'} alignItems={'center'} columnGap={'.2rem'}>
                         <MotionConfig whileTap={{scale:1}} whileHover={{scale:1.050}}>
                             <motion.div>
-                                <LoadingButton sx={{textTransform:"none",fontSize:is480?"":"1rem"}} size={is480?"small":""} loading={reviewStatus==='pending'} type='submit' variant='contained'>Add review</LoadingButton>
+                                <LoadingButton 
+                                  sx={{
+                                    textTransform:"none",
+                                    fontSize:is480?"":"1rem",
+                                    background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
+                                    '&:hover': {
+                                      background: 'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%)',
+                                    },
+                                    borderRadius: 2,
+                                    fontWeight: 600,
+                                    boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)',
+                                    '&:hover': {
+                                      boxShadow: '0 6px 16px rgba(139, 92, 246, 0.4)',
+                                    }
+                                  }} 
+                                  size={is480?"small":""} 
+                                  loading={reviewStatus==='pending'} 
+                                  type='submit' 
+                                  variant='contained'
+                                >
+                                  Add review
+                                </LoadingButton>
                             </motion.div>
                             <motion.div>
-                                <Button onClick={()=>setWriteReview(false)} color='error' size={is480?"small":""} variant='outlined' sx={{textTransform:"none",fontSize:is480?"":"1rem"}}>Cancel</Button>
+                                <Button 
+                                  onClick={()=>setWriteReview(false)} 
+                                  size={is480?"small":""} 
+                                  variant='outlined' 
+                                  sx={{
+                                    textTransform:"none",
+                                    fontSize:is480?"":"1rem",
+                                    borderColor: '#EF4444',
+                                    color: '#EF4444',
+                                    '&:hover': {
+                                      borderColor: '#F87171',
+                                      color: '#F87171',
+                                      background: 'rgba(239, 68, 68, 0.1)',
+                                    }
+                                  }}
+                                >
+                                  Cancel
+                                </Button>
                             </motion.div>
                         </MotionConfig>
                     </Stack>
@@ -172,7 +210,28 @@ export const Reviews = ({productId,averageRating}) => {
                 :
                 !loggedInUser?.isAdmin?
                 <motion.div onClick={()=>setWriteReview(!writeReview)} whileHover={{scale:1.050}} whileTap={{scale:1}} style={{width:"fit-content"}}>
-                        <Button  disableElevation size={is480?"medium":'large'} variant='contained' sx={{color:theme.palette.primary.light,textTransform:"none",fontSize:"1rem",borderRadius:'6px'}}  startIcon={<CreateIcon/>}>Write a review</Button>
+                        <Button  
+                          disableElevation 
+                          size={is480?"medium":'large'} 
+                          variant='contained' 
+                          sx={{
+                            background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
+                            '&:hover': {
+                              background: 'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%)',
+                            },
+                            textTransform:"none",
+                            fontSize:"1rem",
+                            borderRadius:'8px',
+                            fontWeight: 600,
+                            boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)',
+                            '&:hover': {
+                              boxShadow: '0 6px 16px rgba(139, 92, 246, 0.4)',
+                            }
+                          }}  
+                          startIcon={<CreateIcon/>}
+                        >
+                          Write a review
+                        </Button>
                 </motion.div>:""
             }
         </Stack>
