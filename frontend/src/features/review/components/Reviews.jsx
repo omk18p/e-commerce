@@ -98,11 +98,11 @@ export const Reviews = ({productId,averageRating}) => {
     
 
   return (
-        <Stack rowGap={5} alignSelf={"flex-start"}  width={is480?"90vw":is840?"25rem":'40rem'}>
+        <Stack rowGap={5} alignSelf={"center"} width={is480?"90vw":is840?"25rem":'40rem'} sx={{ alignItems: 'center' }}>
 
 
-            <Stack>
-                <Typography gutterBottom variant='h4' fontWeight={400}>Reviews</Typography>
+            <Stack sx={{ width: '100%', alignItems: 'center' }}>
+                <Typography gutterBottom variant='h4' fontWeight={400} sx={{ color: '#FFFFFF', textAlign: 'center' }}>Reviews</Typography>
                 {
                     reviews?.length?(
                         <Stack rowGap={3}>
@@ -136,7 +136,7 @@ export const Reviews = ({productId,averageRating}) => {
             </Stack>
 
             {/* reviews mapping */}
-            <Stack rowGap={2} >
+            <Stack rowGap={2} sx={{ width: '100%' }}>
                 {reviews?.map((review)=>(<ReviewItem key={review._id} id={review._id} userid={review.user._id} comment={review.comment} createdAt={review.createdAt} rating={review.rating} username={review.user.name} />))}
             </Stack>
 
@@ -145,18 +145,48 @@ export const Reviews = ({productId,averageRating}) => {
                 // add review form
                 writeReview?
                 (
-                <Stack rowGap={3} position={'relative'} component={'form'} noValidate onSubmit={handleSubmit(handleAddReview)}>
+                <Stack rowGap={3} position={'relative'} component={'form'} noValidate onSubmit={handleSubmit(handleAddReview)} sx={{ width: '100%', alignItems: 'center' }}>
 
-                    <TextField id='reviewTextFeild' {...register("comment",{required:true})} sx={{mt:4,width:is840?"100%":"40rem"}}  multiline rows={6} fullWidth placeholder='Write a review...'/>
+                    <TextField 
+                      id='reviewTextFeild' 
+                      {...register("comment",{required:true})} 
+                      sx={{
+                        mt:4,
+                        width:is840?"100%":"40rem",
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: 2,
+                          background: 'rgba(15, 15, 35, 0.6)',
+                          backdropFilter: 'blur(10px)',
+                          border: '1px solid rgba(255, 255, 255, 0.1)',
+                          '&:hover .MuiOutlinedInput-notchedOutline': {
+                            borderColor: '#8B5CF6',
+                          },
+                          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            borderColor: '#8B5CF6',
+                            borderWidth: 2,
+                          },
+                          '& .MuiInputBase-input': {
+                            color: '#FFFFFF',
+                          },
+                          '& .MuiInputBase-input::placeholder': {
+                            color: '#94A3B8',
+                          },
+                        },
+                      }}  
+                      multiline 
+                      rows={6} 
+                      fullWidth 
+                      placeholder='Write a review...'
+                    />
                     
-                    <Stack>
-                        <Typography gutterBottom variant='body2'>How much did you like the product?</Typography>
+                    <Stack sx={{ width: '100%', alignItems: 'center' }}>
+                        <Typography gutterBottom variant='body2' sx={{ color: '#FFFFFF', textAlign: 'center' }}>How much did you like the product?</Typography>
                         <motion.div style={{width:"fit-content"}} whileHover={{scale:1.050,x:2}} whileTap={{scale:1}}>
-                            <Rating  size='large' value={value} onChange={(e) => setValue(e.target.value)}/>
+                            <Rating size='large' value={value} onChange={(e) => setValue(e.target.value)} sx={{ color: '#8B5CF6' }}/>
                         </motion.div>
                     </Stack>
                     
-                    <Stack flexDirection={'row'} alignSelf={'flex-end'} alignItems={'center'} columnGap={'.2rem'}>
+                    <Stack flexDirection={'row'} alignItems={'center'} columnGap={'.2rem'} sx={{ mt: 2 }}>
                         <MotionConfig whileTap={{scale:1}} whileHover={{scale:1.050}}>
                             <motion.div>
                                 <LoadingButton 
@@ -209,30 +239,32 @@ export const Reviews = ({productId,averageRating}) => {
                 )
                 :
                 !loggedInUser?.isAdmin?
-                <motion.div onClick={()=>setWriteReview(!writeReview)} whileHover={{scale:1.050}} whileTap={{scale:1}} style={{width:"fit-content"}}>
-                        <Button  
-                          disableElevation 
-                          size={is480?"medium":'large'} 
-                          variant='contained' 
-                          sx={{
-                            background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
-                            '&:hover': {
-                              background: 'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%)',
-                            },
-                            textTransform:"none",
-                            fontSize:"1rem",
-                            borderRadius:'8px',
-                            fontWeight: 600,
-                            boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)',
-                            '&:hover': {
-                              boxShadow: '0 6px 16px rgba(139, 92, 246, 0.4)',
-                            }
-                          }}  
-                          startIcon={<CreateIcon/>}
-                        >
-                          Write a review
-                        </Button>
-                </motion.div>:""
+                <Stack sx={{ width: '100%', alignItems: 'center', mt: 3, mb: 2 }}>
+                    <motion.div onClick={()=>setWriteReview(!writeReview)} whileHover={{scale:1.050}} whileTap={{scale:1}} style={{width:"fit-content"}}>
+                            <Button  
+                              disableElevation 
+                              size={is480?"medium":'large'} 
+                              variant='contained' 
+                              sx={{
+                                background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
+                                '&:hover': {
+                                  background: 'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%)',
+                                },
+                                textTransform:"none",
+                                fontSize:"1rem",
+                                borderRadius:'8px',
+                                fontWeight: 600,
+                                boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)',
+                                '&:hover': {
+                                  boxShadow: '0 6px 16px rgba(139, 92, 246, 0.4)',
+                                }
+                              }}  
+                              startIcon={<CreateIcon/>}
+                            >
+                              Write a review
+                            </Button>
+                    </motion.div>
+                </Stack>:""
             }
         </Stack>
   )

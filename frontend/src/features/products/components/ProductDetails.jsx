@@ -369,7 +369,7 @@ export const ProductDetails = () => {
                         {/* color, size and add-to-cart */}
                         {
                             !loggedInUser?.isAdmin &&
-                        <Stack sx={{ rowGap: '1.3rem', width: '100%', alignItems: 'center' }}>
+                        <Stack sx={{ rowGap: '1.3rem', width: '100%', alignItems: 'center', justifyContent: 'center' }}>
                             {/* colors */}
                             <Stack flexDirection={'row'} alignItems={'center'} columnGap={is387?'5px':'1rem'} width={'fit-content'}>
                                 <Typography sx={{color:'#A78BFA',fontWeight:600}}>Colors: </Typography>
@@ -402,15 +402,18 @@ export const ProductDetails = () => {
                                 </Stack>
                             </Stack>
                             {/* add to cart button */}
-                            <motion.button 
-                                whileHover={{scale:1.05}} 
-                                whileTap={{scale:1}} 
-                                onClick={handleAddToCart} 
-                                className="glass-btn"
-                                disabled={product?.stockQuantity===0}
-                            >
-                                {product?.stockQuantity===0?"Out of Stock":"Add to Cart"}
-                            </motion.button>
+                            <Stack sx={{ mt: 2, mb: 2, width: '100%', alignItems: 'center' }}>
+                                <motion.button 
+                                    whileHover={{scale:1.05}} 
+                                    whileTap={{scale:1}} 
+                                    onClick={handleAddToCart} 
+                                    className="glass-btn"
+                                    disabled={product?.stockQuantity===0}
+                                    style={{ minWidth: '200px' }}
+                                >
+                                    {product?.stockQuantity===0?"Out of Stock":"Add to Cart"}
+                                </motion.button>
+                            </Stack>
                         </Stack>
                         }
                         {/* product perks */}

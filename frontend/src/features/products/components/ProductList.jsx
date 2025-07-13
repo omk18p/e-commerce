@@ -501,7 +501,39 @@ export const ProductList = () => {
 
         </motion.div>
         
-        <Stack mb={'3rem'}>
+        <Stack mb={'3rem'} sx={{
+          background: 'linear-gradient(135deg, #0F0F23 0%, #1A1A2E 50%, #2D1B69 100%)',
+          minHeight: '100vh',
+          color: '#fff',
+          width: '100%',
+          maxWidth: '100vw',
+          overflowX: 'hidden',
+          position: 'relative',
+          zIndex: 1,
+          boxSizing: 'border-box',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(167, 139, 250, 0.1) 0%, transparent 50%), radial-gradient(circle at 40% 40%, rgba(124, 58, 237, 0.08) 0%, transparent 50%)',
+            pointerEvents: 'none',
+            zIndex: 0,
+          },
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%238B5CF6" fill-opacity="0.03"%3E%3Ccircle cx="30" cy="30" r="1"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+            pointerEvents: 'none',
+            zIndex: 0,
+          }
+        }}>
             {/* HERO SECTION REMOVED */}
 
             {/* banners section */}
@@ -522,104 +554,203 @@ export const ProductList = () => {
                 width: '100%',
                 maxWidth: '1200px',
                 mx: 'auto',
-                mt: 4,
-                mb: 6,
+                mt: 6,
+                mb: 8,
                 zIndex: 2,
+                position: 'relative',
               }}
             >
+              {/* Floating particles effect */}
+              <Box sx={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'radial-gradient(circle at 30% 70%, rgba(139, 92, 246, 0.1) 0%, transparent 40%), radial-gradient(circle at 70% 30%, rgba(167, 139, 250, 0.08) 0%, transparent 40%)',
+                pointerEvents: 'none',
+                zIndex: 1,
+              }} />
               {/* Feature Card 1 */}
               <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.1 }}
-                whileHover={{ scale: 1.07, boxShadow: '0 8px 32px 0 #8B5CF6' }}
-                style={{ display: 'flex' }}
+                initial={{ opacity: 0, y: 60, rotateX: -15 }}
+                animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                transition={{ duration: 0.8, delay: 0.1, type: "spring", stiffness: 100 }}
+                whileHover={{ 
+                  scale: 1.08, 
+                  rotateY: 5,
+                  boxShadow: '0 20px 60px 0 rgba(139, 92, 246, 0.4), 0 0 40px rgba(139, 92, 246, 0.2)',
+                  zIndex: 10
+                }}
+                style={{ display: 'flex', position: 'relative', zIndex: 2 }}
               >
                 <motion.div
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{ duration: 3, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
+                  animate={{ 
+                    y: [0, -12, 0],
+                    rotateZ: [0, 1, 0]
+                  }}
+                  transition={{ duration: 4, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
                 >
                   <Stack
                     alignItems="center"
                     sx={{
-                      background: 'rgba(24, 24, 47, 0.92)',
-                      borderRadius: '22px',
-                      px: 4,
-                      py: 3,
-                      minWidth: '200px',
-                      boxShadow: '0 0 32px 0 #8B5CF6',
-                      backdropFilter: 'blur(10px)',
-                      border: '1.5px solid rgba(139, 92, 246, 0.18)',
-                      transition: 'box-shadow 0.3s',
+                      background: 'linear-gradient(135deg, rgba(24, 24, 47, 0.95) 0%, rgba(45, 27, 105, 0.9) 100%)',
+                      borderRadius: '28px',
+                      px: 5,
+                      py: 4,
+                      minWidth: '220px',
+                      boxShadow: '0 8px 40px 0 rgba(139, 92, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+                      backdropFilter: 'blur(20px)',
+                      border: '2px solid rgba(139, 92, 246, 0.25)',
+                      transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                      position: 'relative',
+                      overflow: 'hidden',
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        background: 'linear-gradient(45deg, transparent 30%, rgba(139, 92, 246, 0.1) 50%, transparent 70%)',
+                        transform: 'translateX(-100%)',
+                        transition: 'transform 0.6s',
+                      },
+                      '&:hover::before': {
+                        transform: 'translateX(100%)',
+                      }
                     }}
                   >
-                    <Box sx={{ fontSize: 40, mb: 1 }}>🚚</Box>
-                    <Typography fontWeight={700} color="#fff">Free Shipping</Typography>
-                    <Typography color="#E0E7FF" fontSize={'.95rem'}>On all orders above $50</Typography>
+                    <motion.div
+                      animate={{ rotate: [0, 5, -5, 0] }}
+                      transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+                    >
+                      <Box sx={{ fontSize: 48, mb: 2, filter: 'drop-shadow(0 4px 8px rgba(139, 92, 246, 0.3))' }}>🚚</Box>
+                    </motion.div>
+                    <Typography fontWeight={800} color="#fff" fontSize="1.3rem" sx={{ textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>Free Shipping</Typography>
+                    <Typography color="#E0E7FF" fontSize="1rem" sx={{ textAlign: 'center', opacity: 0.9 }}>On all orders above $50</Typography>
                   </Stack>
                 </motion.div>
               </motion.div>
               {/* Feature Card 2 */}
               <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.2 }}
-                whileHover={{ scale: 1.07, boxShadow: '0 8px 32px 0 #8B5CF6' }}
-                style={{ display: 'flex' }}
+                initial={{ opacity: 0, y: 60, rotateX: -15 }}
+                animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                transition={{ duration: 0.8, delay: 0.2, type: "spring", stiffness: 100 }}
+                whileHover={{ 
+                  scale: 1.08, 
+                  rotateY: -5,
+                  boxShadow: '0 20px 60px 0 rgba(139, 92, 246, 0.4), 0 0 40px rgba(139, 92, 246, 0.2)',
+                  zIndex: 10
+                }}
+                style={{ display: 'flex', position: 'relative', zIndex: 2 }}
               >
                 <motion.div
-                  animate={{ y: [0, 8, 0] }}
-                  transition={{ duration: 3, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut', delay: 1 }}
+                  animate={{ 
+                    y: [0, 12, 0],
+                    rotateZ: [0, -1, 0]
+                  }}
+                  transition={{ duration: 4, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut', delay: 1 }}
                 >
                   <Stack
                     alignItems="center"
                     sx={{
-                      background: 'rgba(24, 24, 47, 0.92)',
-                      borderRadius: '22px',
-                      px: 4,
-                      py: 3,
-                      minWidth: '200px',
-                      boxShadow: '0 0 32px 0 #8B5CF6',
-                      backdropFilter: 'blur(10px)',
-                      border: '1.5px solid rgba(139, 92, 246, 0.18)',
-                      transition: 'box-shadow 0.3s',
+                      background: 'linear-gradient(135deg, rgba(24, 24, 47, 0.95) 0%, rgba(45, 27, 105, 0.9) 100%)',
+                      borderRadius: '28px',
+                      px: 5,
+                      py: 4,
+                      minWidth: '220px',
+                      boxShadow: '0 8px 40px 0 rgba(139, 92, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+                      backdropFilter: 'blur(20px)',
+                      border: '2px solid rgba(139, 92, 246, 0.25)',
+                      transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                      position: 'relative',
+                      overflow: 'hidden',
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        background: 'linear-gradient(45deg, transparent 30%, rgba(139, 92, 246, 0.1) 50%, transparent 70%)',
+                        transform: 'translateX(-100%)',
+                        transition: 'transform 0.6s',
+                      },
+                      '&:hover::before': {
+                        transform: 'translateX(100%)',
+                      }
                     }}
                   >
-                    <Box sx={{ fontSize: 40, mb: 1 }}>💬</Box>
-                    <Typography fontWeight={700} color="#fff">24/7 Support</Typography>
-                    <Typography color="#E0E7FF" fontSize={'.95rem'}>We’re here for you anytime</Typography>
+                    <motion.div
+                      animate={{ rotate: [0, -5, 5, 0] }}
+                      transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+                    >
+                      <Box sx={{ fontSize: 48, mb: 2, filter: 'drop-shadow(0 4px 8px rgba(139, 92, 246, 0.3))' }}>💬</Box>
+                    </motion.div>
+                    <Typography fontWeight={800} color="#fff" fontSize="1.3rem" sx={{ textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>24/7 Support</Typography>
+                    <Typography color="#E0E7FF" fontSize="1rem" sx={{ textAlign: 'center', opacity: 0.9 }}>We're here for you anytime</Typography>
                   </Stack>
                 </motion.div>
               </motion.div>
               {/* Feature Card 3 */}
               <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.3 }}
-                whileHover={{ scale: 1.07, boxShadow: '0 8px 32px 0 #8B5CF6' }}
-                style={{ display: 'flex' }}
+                initial={{ opacity: 0, y: 60, rotateX: -15 }}
+                animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                transition={{ duration: 0.8, delay: 0.3, type: "spring", stiffness: 100 }}
+                whileHover={{ 
+                  scale: 1.08, 
+                  rotateY: 5,
+                  boxShadow: '0 20px 60px 0 rgba(139, 92, 246, 0.4), 0 0 40px rgba(139, 92, 246, 0.2)',
+                  zIndex: 10
+                }}
+                style={{ display: 'flex', position: 'relative', zIndex: 2 }}
               >
                 <motion.div
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{ duration: 3, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut', delay: 2 }}
+                  animate={{ 
+                    y: [0, -12, 0],
+                    rotateZ: [0, 1, 0]
+                  }}
+                  transition={{ duration: 4, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut', delay: 2 }}
                 >
                   <Stack
                     alignItems="center"
                     sx={{
-                      background: 'rgba(24, 24, 47, 0.92)',
-                      borderRadius: '22px',
-                      px: 4,
-                      py: 3,
-                      minWidth: '200px',
-                      boxShadow: '0 0 32px 0 #8B5CF6',
-                      backdropFilter: 'blur(10px)',
-                      border: '1.5px solid rgba(139, 92, 246, 0.18)',
-                      transition: 'box-shadow 0.3s',
+                      background: 'linear-gradient(135deg, rgba(24, 24, 47, 0.95) 0%, rgba(45, 27, 105, 0.9) 100%)',
+                      borderRadius: '28px',
+                      px: 5,
+                      py: 4,
+                      minWidth: '220px',
+                      boxShadow: '0 8px 40px 0 rgba(139, 92, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+                      backdropFilter: 'blur(20px)',
+                      border: '2px solid rgba(139, 92, 246, 0.25)',
+                      transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                      position: 'relative',
+                      overflow: 'hidden',
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        background: 'linear-gradient(45deg, transparent 30%, rgba(139, 92, 246, 0.1) 50%, transparent 70%)',
+                        transform: 'translateX(-100%)',
+                        transition: 'transform 0.6s',
+                      },
+                      '&:hover::before': {
+                        transform: 'translateX(100%)',
+                      }
                     }}
                   >
-                    <Box sx={{ fontSize: 40, mb: 1 }}>🔄</Box>
-                    <Typography fontWeight={700} color="#fff">Easy Returns</Typography>
-                    <Typography color="#E0E7FF" fontSize={'.95rem'}>30-day hassle-free returns</Typography>
+                    <motion.div
+                      animate={{ rotate: [0, 5, -5, 0] }}
+                      transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+                    >
+                      <Box sx={{ fontSize: 48, mb: 2, filter: 'drop-shadow(0 4px 8px rgba(139, 92, 246, 0.3))' }}>🔄</Box>
+                    </motion.div>
+                    <Typography fontWeight={800} color="#fff" fontSize="1.3rem" sx={{ textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>Easy Returns</Typography>
+                    <Typography color="#E0E7FF" fontSize="1rem" sx={{ textAlign: 'center', opacity: 0.9 }}>30-day hassle-free returns</Typography>
                   </Stack>
                 </motion.div>
               </motion.div>

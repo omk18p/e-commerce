@@ -229,9 +229,7 @@ export const Navbar=({isProductList=false})=> {
             <Stack sx={{flexDirection:"row",columnGap:"1.5rem",alignItems:"center",justifyContent:"center"}}>
 
             
-            {
-            cartItems?.length>0 && 
-            <Badge badgeContent={cartItems.length} color='error'>
+            <Badge badgeContent={cartItems?.length || 0} color='error'>
               <IconButton 
                 onClick={()=>navigate("/cart")}
                 sx={{
@@ -245,7 +243,6 @@ export const Navbar=({isProductList=false})=> {
                 <ShoppingCartOutlinedIcon />
               </IconButton>
             </Badge>
-            }
             
             {
               !loggedInUser?.isAdmin &&
