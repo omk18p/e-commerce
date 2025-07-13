@@ -4,7 +4,7 @@
 
 ## 🚀 Live Demo
 
-- **Frontend**: [https://e-commerce-orpin-alpha.vercel.app](https://e-commerce-orpin-alpha.vercel.app)
+- **Frontend**: [https://e-commerce-omkar-patils-projects-32e90623.vercel.app/login](https://e-commerce-omkar-patils-projects-32e90623.vercel.app/login)
 - **Backend**: [https://e-commerce-5rkc.onrender.com](https://e-commerce-5rkc.onrender.com)
 
 ## ✨ About NovaMart
@@ -201,7 +201,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Omkar Patil**
 - GitHub: [@omk18p](https://github.com/omk18p)
-- Live Demo: [NovaMart](https://e-commerce-orpin-alpha.vercel.app)
+- Live Demo: [NovaMart](https://e-commerce-omkar-patils-projects-32e90623.vercel.app/login)
 
 ## 🙏 Acknowledgments
 
