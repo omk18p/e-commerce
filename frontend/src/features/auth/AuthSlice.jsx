@@ -120,6 +120,14 @@ const authSlice=createSlice({
         },
         clearResetPasswordError:(state)=>{
             state.resetPasswordError=null
+        },
+        restoreUserFromStorage:(state)=>{
+            const token = localStorage.getItem('authToken')
+            if (token) {
+                // You can decode the token here if needed
+                // For now, we'll just set a flag that user has token
+                state.hasStoredToken = true
+            }
         }
 
         
@@ -132,6 +140,10 @@ const authSlice=createSlice({
             .addCase(signupAsync.fulfilled,(state,action)=>{
                 state.signupStatus='fullfilled'
                 state.loggedInUser=action.payload
+                // Store token in localStorage
+                if (action.payload.token) {
+                    localStorage.setItem('authToken', action.payload.token)
+                }
             })
             .addCase(signupAsync.rejected,(state,action)=>{
                 state.signupStatus='rejected'
@@ -144,6 +156,10 @@ const authSlice=createSlice({
             .addCase(loginAsync.fulfilled,(state,action)=>{
                 state.loginStatus='fullfilled'
                 state.loggedInUser=action.payload
+                // Store token in localStorage
+                if (action.payload.token) {
+                    localStorage.setItem('authToken', action.payload.token)
+                }
             })
             .addCase(loginAsync.rejected,(state,action)=>{
                 state.loginStatus='rejected'
@@ -204,6 +220,8 @@ const authSlice=createSlice({
             .addCase(logoutAsync.fulfilled,(state)=>{
                 state.status='fullfilled'
                 state.loggedInUser=null
+                // Clear token from localStorage
+                localStorage.removeItem('authToken')
             })
             .addCase(logoutAsync.rejected,(state,action)=>{
                 state.status='rejected'
@@ -251,7 +269,7 @@ export const selectResetPasswordSuccessMessage=(state)=>state.AuthSlice.resetPas
 export const selectResetPasswordError=(state)=>state.AuthSlice.resetPasswordError
 
 // exporting reducers
-export const {clearAuthSuccessMessage,clearAuthErrors,resetAuthStatus,clearSignupError,resetSignupStatus,clearLoginError,resetLoginStatus,clearOtpVerificationError,resetOtpVerificationStatus,clearResendOtpError,clearResendOtpSuccessMessage,resetResendOtpStatus,clearForgotPasswordError,clearForgotPasswordSuccessMessage,resetForgotPasswordStatus,clearResetPasswordError,clearResetPasswordSuccessMessage,resetResetPasswordStatus}=authSlice.actions
+export const {clearAuthSuccessMessage,clearAuthErrors,resetAuthStatus,clearSignupError,resetSignupStatus,clearLoginError,resetLoginStatus,clearOtpVerificationError,resetOtpVerificationStatus,clearResendOtpError,clearResendOtpSuccessMessage,resetResendOtpStatus,clearForgotPasswordError,clearForgotPasswordSuccessMessage,resetForgotPasswordStatus,clearResetPasswordError,clearResetPasswordSuccessMessage,resetResetPasswordStatus,restoreUserFromStorage}=authSlice.actions
 
 export default authSlice.reducer
 

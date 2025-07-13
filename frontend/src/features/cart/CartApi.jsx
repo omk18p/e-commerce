@@ -16,6 +16,8 @@ export const addToCart=async(item)=>{
         console.error('Error config:', error.config)
         
         if (error.response?.status === 401) {
+            // Redirect to login page for authentication issues
+            window.location.href = '/login'
             throw { message: 'Authentication failed. Please login again.' }
         } else if (error.response?.status === 404) {
             throw { message: 'Product not found.' }
@@ -72,5 +74,18 @@ export const testAuth=async()=>{
     } catch (error) {
         console.error('Auth test error:', error)
         throw error.response?.data || {message: 'Authentication test failed'}
+    }
+}
+
+// Check if user is authenticated
+export const checkAuthentication=async()=>{
+    try {
+        console.log('Checking authentication status...')
+        const res=await axiosi.get('/auth/check-auth')
+        console.log('Auth check response:', res.data)
+        return res.data
+    } catch (error) {
+        console.error('Auth check error:', error)
+        return null
     }
 }

@@ -6,13 +6,19 @@ exports.verifyToken=async(req,res,next)=>{
     try {
         console.log('Verifying token for request:', req.path)
         console.log('Cookies:', req.cookies)
+        console.log('Authorization header:', req.headers.authorization)
         
-        // extract the token from request cookies
-        const {token}=req.cookies
+        // extract the token from request cookies or Authorization header
+        let token = req.cookies?.token
+        
+        // If no token in cookies, check Authorization header
+        if(!token && req.headers.authorization){
+            token = req.headers.authorization.replace('Bearer ', '')
+        }
 
         // if token is not there, return 401 response
         if(!token){
-            console.log('No token found in cookies')
+            console.log('No token found in cookies or Authorization header')
             return res.status(401).json({message:"Token missing, please login again"})
         }
 

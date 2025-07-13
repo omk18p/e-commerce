@@ -32,13 +32,14 @@ exports.signup=async(req,res)=>{
 
         // sending jwt token in the response cookies
         res.cookie('token',token,{
-            sameSite:process.env.PRODUCTION==='true'?"None":'Lax',
+            sameSite: 'None',
             maxAge:new Date(Date.now() + (parseInt(process.env.COOKIE_EXPIRATION_DAYS * 24 * 60 * 60 * 1000))),
             httpOnly:true,
-            secure:process.env.PRODUCTION==='true'?true:false
+            secure: true,
+            domain: process.env.NODE_ENV === 'production' ? '.onrender.com' : undefined
         })
 
-        res.status(201).json(sanitizeUser(createdUser))
+        res.status(201).json({...sanitizeUser(createdUser), token})
 
     } catch (error) {
         console.log(error);
@@ -62,12 +63,13 @@ exports.login=async(req,res)=>{
 
             // sending jwt token in the response cookies
             res.cookie('token',token,{
-                sameSite:process.env.PRODUCTION==='true'?"None":'Lax',
+                sameSite: 'None',
                 maxAge:new Date(Date.now() + (parseInt(process.env.COOKIE_EXPIRATION_DAYS * 24 * 60 * 60 * 1000))),
                 httpOnly:true,
-                secure:process.env.PRODUCTION==='true'?true:false
+                secure: true,
+                domain: process.env.NODE_ENV === 'production' ? '.onrender.com' : undefined
             })
-            return res.status(200).json(sanitizeUser(existingUser))
+            return res.status(200).json({...sanitizeUser(existingUser), token})
         }
 
         res.clearCookie('token');
