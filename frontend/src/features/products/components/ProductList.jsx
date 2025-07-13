@@ -191,9 +191,16 @@ export const ProductList = () => {
             navigate('/login')
             return
         }
-        const data={product:productId,quantity:1}
+        const data={user:loggedInUser._id,product:productId,quantity:1}
         console.log('Adding to cart:', data)
-        dispatch(addToCartAsync(data))
+        console.log('User ID:', loggedInUser._id)
+        console.log('Product ID:', productId)
+        console.log('Base URL:', process.env.REACT_APP_BASE_URL)
+        
+        // Add a small delay to prevent rapid clicking
+        setTimeout(() => {
+            dispatch(addToCartAsync(data))
+        }, 100)
     }
 
     useEffect(()=>{
