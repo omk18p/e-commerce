@@ -117,9 +117,21 @@ export const Reviews = ({productId,averageRating}) => {
                                 {
                                     [5,4,3,2,1].map((number)=>(
                                         <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'} columnGap={1}>
-                                            <Typography sx={{whiteSpace:"nowrap"}}>{number} star</Typography>
-                                            <LinearProgress sx={{width:"100%",height:"1rem",borderRadius:"4px"}} variant='determinate' value={(ratingCounts[number]/reviews?.length)*100}/>   
-                                            <Typography>{parseInt(ratingCounts[number]/reviews?.length*100)}%</Typography>
+                                            <Typography sx={{whiteSpace:"nowrap", color: '#FFFFFF'}}>{number} star</Typography>
+                                            <LinearProgress 
+                                                sx={{
+                                                    width:"100%",
+                                                    height:"1rem",
+                                                    borderRadius:"4px",
+                                                    backgroundColor: 'rgba(139, 92, 246, 0.2)',
+                                                    '& .MuiLinearProgress-bar': {
+                                                        backgroundColor: '#8B5CF6'
+                                                    }
+                                                }} 
+                                                variant='determinate' 
+                                                value={(ratingCounts[number]/reviews?.length)*100}
+                                            />   
+                                            <Typography sx={{ color: '#FFFFFF' }}>{parseInt(ratingCounts[number]/reviews?.length*100)}%</Typography>
                                         </Stack>
                                     ))
                                 }

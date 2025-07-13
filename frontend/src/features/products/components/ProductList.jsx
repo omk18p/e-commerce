@@ -26,6 +26,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import SearchIcon from '@mui/icons-material/Search';
 import Lottie from 'lottie-react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import TuneIcon from '@mui/icons-material/Tune';
 
 
 const sortOptions=[
@@ -279,43 +280,111 @@ export const ProductList = () => {
           color: '#FFFFFF'
         }}  variants={{show:{left:0},hide:{left:-500}}} initial={'hide'} transition={{ease:"easeInOut",duration:.7,type:"spring"}} animate={isProductFilterOpen===true?"show":"hide"}>
 
+            {/* Animated Stars for Filter Sidebar */}
+            <Box sx={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              overflow: 'hidden',
+              pointerEvents: 'none',
+              zIndex: 1,
+            }}>
+              {/* Small Stars */}
+              {[...Array(8)].map((_, i) => (
+                <Box
+                  key={`filter-star-${i}`}
+                  sx={{
+                    position: 'absolute',
+                    width: '1px',
+                    height: '1px',
+                    background: '#A78BFA',
+                    borderRadius: '50%',
+                    animation: `filter-twinkle ${2 + Math.random() * 2}s ease-in-out infinite`,
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                    animationDelay: `${Math.random() * 2}s`,
+                    '@keyframes filter-twinkle': {
+                      '0%, 100%': {
+                        opacity: 0.2,
+                        transform: 'scale(1)',
+                      },
+                      '50%': {
+                        opacity: 1,
+                        transform: 'scale(1.5)',
+                      },
+                    },
+                  }}
+                />
+              ))}
+            </Box>
+
             {/* fitlers section */}
-            <Stack mb={'5rem'}  sx={{scrollBehavior:"smooth",overflowY:"scroll"}}>
+            <Stack mb={'5rem'} sx={{scrollBehavior:"smooth",overflowY:"scroll", position: 'relative', zIndex: 2}}>
 
-                    
-                        <Typography 
-                          variant='h4' 
-                          sx={{
-                            fontWeight: 800,
-                            background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
-                            backgroundClip: 'text',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent',
-                            mb: 3
-                          }}
-                        >
-                          New Arrivals
-                        </Typography>
-
-
-                            <IconButton 
-                              onClick={handleFilterClose} 
-                              style={{position:"absolute",top:15,right:15}}
+                    {/* Header with Icon */}
+                    <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 3 }}>
+                        <Stack direction="row" alignItems="center" spacing={1}>
+                            <Box sx={{ 
+                                background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
+                                borderRadius: '50%',
+                                width: 40,
+                                height: 40,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)'
+                            }}>
+                                <TuneIcon sx={{ color: '#FFFFFF', fontSize: 20 }} />
+                            </Box>
+                            <Typography 
+                              variant='h4' 
                               sx={{
-                                color: '#8B5CF6',
-                                '&:hover': {
-                                  background: 'rgba(139, 92, 246, 0.1)',
-                                }
+                                fontWeight: 800,
+                                background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
+                                backgroundClip: 'text',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
                               }}
                             >
-                                <motion.div whileHover={{scale:1.1}} whileTap={{scale:0.9}}>
-                                    <ClearIcon fontSize='medium'/>
-                                </motion.div>
-                            </IconButton>
+                              Filters
+                            </Typography>
+                        </Stack>
+
+                        <IconButton 
+                          onClick={handleFilterClose} 
+                          sx={{
+                            color: '#8B5CF6',
+                            background: 'rgba(139, 92, 246, 0.1)',
+                            borderRadius: '50%',
+                            '&:hover': {
+                              background: 'rgba(139, 92, 246, 0.2)',
+                              transform: 'scale(1.1)',
+                            }
+                          }}
+                        >
+                            <motion.div whileHover={{scale:1.1}} whileTap={{scale:0.9}}>
+                                <ClearIcon fontSize='medium'/>
+                            </motion.div>
+                        </IconButton>
+                    </Stack>
 
                     {/* Advanced Search */}
                     <Stack mt={4} rowGap={2}>
-                        <Typography sx={{ color: '#FFFFFF', fontWeight: 600, mb: 1 }}>Search Products</Typography>
+                        <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+                            <SearchIcon sx={{ color: '#8B5CF6', fontSize: 20 }} />
+                            <Typography sx={{ 
+                                color: '#FFFFFF', 
+                                fontWeight: 600,
+                                background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
+                                backgroundClip: 'text',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent'
+                            }}>
+                                Search Products
+                            </Typography>
+                        </Stack>
                         <TextField
                             fullWidth
                             placeholder="Search by name, brand, or category..."
@@ -349,48 +418,229 @@ export const ProductList = () => {
                     </Stack>
 
                     {/* Price Range Filter */}
-                    <Stack mt={3} rowGap={2}>
-                        <Typography sx={{ color: '#FFFFFF', fontWeight: 600, mb: 1 }}>Price Range</Typography>
-                        <Box sx={{ px: 2 }}>
+                    <Stack mt={4} rowGap={2}>
+                        <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+                            <Box sx={{ 
+                                background: 'linear-gradient(135deg, #10B981 0%, #34D399 100%)',
+                                borderRadius: '50%',
+                                width: 32,
+                                height: 32,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                boxShadow: '0 2px 8px rgba(16, 185, 129, 0.3)'
+                            }}>
+                                <Typography sx={{ color: '#FFFFFF', fontSize: 14, fontWeight: 600 }}>$</Typography>
+                            </Box>
+                            <Typography sx={{ 
+                                color: '#FFFFFF', 
+                                fontWeight: 600,
+                                background: 'linear-gradient(135deg, #10B981 0%, #34D399 100%)',
+                                backgroundClip: 'text',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent'
+                            }}>
+                                Price Range
+                            </Typography>
+                        </Stack>
+                        <Box sx={{ 
+                            px: 3, 
+                            py: 3,
+                            background: 'rgba(16, 185, 129, 0.1)',
+                            borderRadius: 3,
+                            border: '1px solid rgba(16, 185, 129, 0.2)',
+                            transition: 'all 0.3s ease',
+                            '&:hover': {
+                                borderColor: 'rgba(16, 185, 129, 0.4)',
+                                boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)'
+                            }
+                        }}>
                             <Slider
                                 value={priceRange}
-                                onChange={(event, newValue) => setPriceRange(newValue)}
-                                valueLabelDisplay="auto"
+                                onChange={(event, newValue) => {
+                                    setPriceRange(newValue);
+                                    // Trigger immediate search update
+                                    setTimeout(() => {
+                                        const filtered = products.filter(product => {
+                                            const matchesSearch = !searchQuery.trim() || 
+                                                (product.title?.toLowerCase() || '').includes(searchQuery.toLowerCase()) ||
+                                                (product.brand?.name?.toLowerCase() || '').includes(searchQuery.toLowerCase()) ||
+                                                (product.category?.name?.toLowerCase() || '').includes(searchQuery.toLowerCase());
+                                            
+                                            const matchesPrice = product.price >= newValue[0] && product.price <= newValue[1];
+                                            
+                                            return matchesSearch && matchesPrice;
+                                        });
+                                        setFilteredProducts(filtered);
+                                    }, 100);
+                                }}
+                                valueLabelDisplay="on"
                                 min={0}
                                 max={1000}
+                                step={10}
                                 sx={{
-                                    color: '#8B5CF6',
+                                    color: '#10B981',
+                                    height: 8,
                                     '& .MuiSlider-thumb': {
-                                        background: '#8B5CF6',
+                                        background: 'linear-gradient(135deg, #10B981 0%, #34D399 100%)',
+                                        width: 24,
+                                        height: 24,
+                                        boxShadow: '0 4px 12px rgba(16, 185, 129, 0.4)',
                                         '&:hover': {
-                                            boxShadow: '0 0 0 8px rgba(139, 92, 246, 0.2)',
+                                            boxShadow: '0 0 0 12px rgba(16, 185, 129, 0.2)',
+                                            transform: 'scale(1.2)',
                                         },
+                                        '&.Mui-active': {
+                                            boxShadow: '0 0 0 16px rgba(16, 185, 129, 0.3)',
+                                        },
+                                        transition: 'all 0.2s ease',
                                     },
                                     '& .MuiSlider-track': {
-                                        background: 'linear-gradient(90deg, #8B5CF6, #A78BFA)',
+                                        background: 'linear-gradient(90deg, #10B981 0%, #34D399 100%)',
+                                        height: 8,
+                                        borderRadius: 4,
+                                        boxShadow: '0 2px 4px rgba(16, 185, 129, 0.3)',
                                     },
                                     '& .MuiSlider-rail': {
-                                        background: 'rgba(139, 92, 246, 0.2)',
+                                        background: 'rgba(16, 185, 129, 0.2)',
+                                        height: 8,
+                                        borderRadius: 4,
+                                    },
+                                    '& .MuiSlider-valueLabel': {
+                                        background: 'linear-gradient(135deg, #10B981 0%, #34D399 100%)',
+                                        color: '#FFFFFF',
+                                        fontWeight: 600,
+                                        fontSize: '0.9rem',
+                                        boxShadow: '0 4px 12px rgba(16, 185, 129, 0.4)',
                                     },
                                 }}
                             />
-                            <Stack flexDirection="row" justifyContent="space-between" mt={1}>
-                                <Typography sx={{ color: '#94A3B8', fontSize: '0.9rem' }}>
-                                    ${priceRange[0]}
+                            <Stack flexDirection="row" justifyContent="space-between" mt={3}>
+                                <motion.div
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    <Typography sx={{ 
+                                        color: '#10B981', 
+                                        fontSize: '1rem',
+                                        fontWeight: 700,
+                                        background: 'rgba(16, 185, 129, 0.15)',
+                                        px: 2,
+                                        py: 1,
+                                        borderRadius: 2,
+                                        border: '1px solid rgba(16, 185, 129, 0.3)',
+                                        boxShadow: '0 2px 8px rgba(16, 185, 129, 0.2)',
+                                        textAlign: 'center',
+                                        minWidth: '80px'
+                                    }}>
+                                        ${priceRange[0]}
+                                    </Typography>
+                                </motion.div>
+                                <Typography sx={{ 
+                                    color: '#94A3B8', 
+                                    fontSize: '0.9rem',
+                                    fontWeight: 500,
+                                    alignSelf: 'center'
+                                }}>
+                                    to
                                 </Typography>
-                                <Typography sx={{ color: '#94A3B8', fontSize: '0.9rem' }}>
-                                    ${priceRange[1]}
+                                <motion.div
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    <Typography sx={{ 
+                                        color: '#10B981', 
+                                        fontSize: '1rem',
+                                        fontWeight: 700,
+                                        background: 'rgba(16, 185, 129, 0.15)',
+                                        px: 2,
+                                        py: 1,
+                                        borderRadius: 2,
+                                        border: '1px solid rgba(16, 185, 129, 0.3)',
+                                        boxShadow: '0 2px 8px rgba(16, 185, 129, 0.2)',
+                                        textAlign: 'center',
+                                        minWidth: '80px'
+                                    }}>
+                                        ${priceRange[1]}
+                                    </Typography>
+                                </motion.div>
+                            </Stack>
+                            
+                            {/* Price Range Info */}
+                            <Stack direction="row" justifyContent="center" mt={2}>
+                                <Typography sx={{ 
+                                    color: '#94A3B8', 
+                                    fontSize: '0.8rem',
+                                    fontWeight: 500,
+                                    textAlign: 'center',
+                                    background: 'rgba(148, 163, 184, 0.1)',
+                                    px: 2,
+                                    py: 0.5,
+                                    borderRadius: 1
+                                }}>
+                                    {products.filter(product => 
+                                        product.price >= priceRange[0] && product.price <= priceRange[1]
+                                    ).length} products in range
                                 </Typography>
                             </Stack>
                         </Box>
                     </Stack>
 
-                    <Stack rowGap={2} mt={4} >
-                        <Typography sx={{cursor:"pointer", color: '#E0E7FF', fontWeight: 500, '&:hover': { color: '#8B5CF6' }}} variant='body2'>Totes</Typography>
-                        <Typography sx={{cursor:"pointer", color: '#E0E7FF', fontWeight: 500, '&:hover': { color: '#8B5CF6' }}} variant='body2'>Backpacks</Typography>
-                        <Typography sx={{cursor:"pointer", color: '#E0E7FF', fontWeight: 500, '&:hover': { color: '#8B5CF6' }}} variant='body2'>Travel Bags</Typography>
-                        <Typography sx={{cursor:"pointer", color: '#E0E7FF', fontWeight: 500, '&:hover': { color: '#8B5CF6' }}} variant='body2'>Hip Bags</Typography>
-                        <Typography sx={{cursor:"pointer", color: '#E0E7FF', fontWeight: 500, '&:hover': { color: '#8B5CF6' }}} variant='body2'>Laptop Sleeves</Typography>
+                    {/* Quick Categories */}
+                    <Stack mt={4} rowGap={2}>
+                        <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+                            <Box sx={{ 
+                                background: 'linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%)',
+                                borderRadius: '50%',
+                                width: 32,
+                                height: 32,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                boxShadow: '0 2px 8px rgba(245, 158, 11, 0.3)'
+                            }}>
+                                <Typography sx={{ color: '#FFFFFF', fontSize: 14, fontWeight: 600 }}>🎒</Typography>
+                            </Box>
+                            <Typography sx={{ 
+                                color: '#FFFFFF', 
+                                fontWeight: 600,
+                                background: 'linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%)',
+                                backgroundClip: 'text',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent'
+                            }}>
+                                Quick Categories
+                            </Typography>
+                        </Stack>
+                        <Stack rowGap={1}>
+                            {['Totes', 'Backpacks', 'Travel Bags', 'Hip Bags', 'Laptop Sleeves'].map((category, index) => (
+                                <motion.div
+                                    key={category}
+                                    whileHover={{ x: 5, scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                >
+                                    <Typography 
+                                        sx={{
+                                            cursor: "pointer", 
+                                            color: '#E0E7FF', 
+                                            fontWeight: 500, 
+                                            py: 1,
+                                            px: 2,
+                                            borderRadius: 1,
+                                            transition: 'all 0.3s ease',
+                                            '&:hover': { 
+                                                color: '#F59E0B',
+                                                background: 'rgba(245, 158, 11, 0.1)',
+                                                transform: 'translateX(5px)'
+                                            }
+                                        }} 
+                                        variant='body2'
+                                    >
+                                        {category}
+                                    </Typography>
+                                </motion.div>
+                            ))}
+                        </Stack>
                     </Stack>
 
                     {/* brand filters */}
@@ -511,7 +761,7 @@ export const ProductList = () => {
         </motion.div>
         
         <Stack mb={'3rem'} sx={{
-          background: 'linear-gradient(135deg, #0F0F23 0%, #1A1A2E 50%, #2D1B69 100%)',
+          background: 'linear-gradient(135deg, #0A0A1A 0%, #1A0B2E 25%, #2D1B69 50%, #1A0B2E 75%, #0A0A1A 100%)',
           minHeight: '100vh',
           color: '#fff',
           width: '100%',
@@ -527,7 +777,13 @@ export const ProductList = () => {
             left: 0,
             right: 0,
             bottom: 0,
-            background: 'radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(167, 139, 250, 0.1) 0%, transparent 50%), radial-gradient(circle at 40% 40%, rgba(124, 58, 237, 0.08) 0%, transparent 50%)',
+            background: `
+              radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(167, 139, 250, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 40% 40%, rgba(124, 58, 237, 0.08) 0%, transparent 50%),
+              radial-gradient(circle at 60% 60%, rgba(168, 85, 247, 0.05) 0%, transparent 50%),
+              radial-gradient(circle at 10% 30%, rgba(147, 51, 234, 0.06) 0%, transparent 50%)
+            `,
             pointerEvents: 'none',
             zIndex: 0,
           },
@@ -538,17 +794,329 @@ export const ProductList = () => {
             left: 0,
             right: 0,
             bottom: 0,
-            background: 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%238B5CF6" fill-opacity="0.03"%3E%3Ccircle cx="30" cy="30" r="1"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+            background: `
+              url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%238B5CF6' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
+              url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23A78BFA' fill-opacity='0.02'%3E%3Ccircle cx='60' cy='60' r='1.5'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
+              url("data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C4B5FD' fill-opacity='0.015'%3E%3Ccircle cx='90' cy='90' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
+            `,
             pointerEvents: 'none',
             zIndex: 0,
           }
         }}>
-            {/* HERO SECTION REMOVED */}
+            {/* Animated Stars Background */}
+            <Box sx={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              overflow: 'hidden',
+              pointerEvents: 'none',
+              zIndex: 1,
+            }}>
+              {/* Large Stars */}
+              {[...Array(15)].map((_, i) => (
+                <Box
+                  key={`large-star-${i}`}
+                  sx={{
+                    position: 'absolute',
+                    width: '3px',
+                    height: '3px',
+                    background: '#FFFFFF',
+                    borderRadius: '50%',
+                    boxShadow: '0 0 6px #FFFFFF, 0 0 12px rgba(139, 92, 246, 0.6)',
+                    animation: `twinkle ${3 + Math.random() * 4}s ease-in-out infinite, float ${8 + Math.random() * 4}s ease-in-out infinite, rotate ${12 + Math.random() * 6}s linear infinite`,
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                    animationDelay: `${Math.random() * 2}s`,
+                    '@keyframes twinkle': {
+                      '0%, 100%': {
+                        opacity: 0.3,
+                        transform: 'scale(1)',
+                      },
+                      '50%': {
+                        opacity: 1,
+                        transform: 'scale(1.2)',
+                      },
+                    },
+                    '@keyframes float': {
+                      '0%, 100%': {
+                        transform: 'translateY(0px) translateX(0px)',
+                      },
+                      '25%': {
+                        transform: 'translateY(-10px) translateX(5px)',
+                      },
+                      '50%': {
+                        transform: 'translateY(-5px) translateX(-3px)',
+                      },
+                      '75%': {
+                        transform: 'translateY(-15px) translateX(8px)',
+                      },
+                    },
+                    '@keyframes rotate': {
+                      '0%': { transform: 'rotate(0deg)' },
+                      '100%': { transform: 'rotate(360deg)' },
+                    },
+                  }}
+                />
+              ))}
+              
+              {/* Medium Stars */}
+              {[...Array(25)].map((_, i) => (
+                <Box
+                  key={`medium-star-${i}`}
+                  sx={{
+                    position: 'absolute',
+                    width: '2px',
+                    height: '2px',
+                    background: '#E0E7FF',
+                    borderRadius: '50%',
+                    boxShadow: '0 0 4px rgba(139, 92, 246, 0.4)',
+                    animation: `twinkle ${2 + Math.random() * 3}s ease-in-out infinite, float-reverse ${6 + Math.random() * 3}s ease-in-out infinite, pulse ${4 + Math.random() * 2}s ease-in-out infinite`,
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                    animationDelay: `${Math.random() * 2}s`,
+                    '@keyframes float-reverse': {
+                      '0%, 100%': {
+                        transform: 'translateY(0px) translateX(0px)',
+                      },
+                      '33%': {
+                        transform: 'translateY(8px) translateX(-6px)',
+                      },
+                      '66%': {
+                        transform: 'translateY(12px) translateX(4px)',
+                      },
+                    },
+                    '@keyframes pulse': {
+                      '0%, 100%': {
+                        boxShadow: '0 0 4px rgba(139, 92, 246, 0.4)',
+                      },
+                      '50%': {
+                        boxShadow: '0 0 8px rgba(139, 92, 246, 0.8), 0 0 12px rgba(167, 139, 250, 0.6)',
+                      },
+                    },
+                  }}
+                />
+              ))}
+              
+              {/* Small Stars */}
+              {[...Array(40)].map((_, i) => (
+                <Box
+                  key={`small-star-${i}`}
+                  sx={{
+                    position: 'absolute',
+                    width: '1px',
+                    height: '1px',
+                    background: '#A78BFA',
+                    borderRadius: '50%',
+                    animation: `twinkle ${1.5 + Math.random() * 2}s ease-in-out infinite, drift ${10 + Math.random() * 5}s linear infinite, color-shift ${6 + Math.random() * 3}s ease-in-out infinite`,
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                    animationDelay: `${Math.random() * 3}s`,
+                    '@keyframes drift': {
+                      '0%': {
+                        transform: 'translateX(0px) translateY(0px)',
+                      },
+                      '25%': {
+                        transform: 'translateX(15px) translateY(-8px)',
+                      },
+                      '50%': {
+                        transform: 'translateX(25px) translateY(5px)',
+                      },
+                      '75%': {
+                        transform: 'translateX(10px) translateY(12px)',
+                      },
+                      '100%': {
+                        transform: 'translateX(0px) translateY(0px)',
+                      },
+                    },
+                    '@keyframes color-shift': {
+                      '0%, 100%': {
+                        background: '#A78BFA',
+                      },
+                      '25%': {
+                        background: '#C4B5FD',
+                      },
+                      '50%': {
+                        background: '#DDD6FE',
+                      },
+                      '75%': {
+                        background: '#E0E7FF',
+                      },
+                    },
+                  }}
+                />
+              ))}
+              
+              {/* Shooting Stars */}
+              {[...Array(3)].map((_, i) => (
+                <Box
+                  key={`shooting-star-${i}`}
+                  sx={{
+                    position: 'absolute',
+                    width: '2px',
+                    height: '2px',
+                    background: 'linear-gradient(90deg, #FFFFFF, transparent)',
+                    borderRadius: '50%',
+                    animation: `shooting-star ${8 + Math.random() * 4}s linear infinite, shooting-trail ${8 + Math.random() * 4}s linear infinite`,
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                    animationDelay: `${Math.random() * 8}s`,
+                    '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      width: '100px',
+                      height: '1px',
+                      background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.8), rgba(139, 92, 246, 0.6), transparent)',
+                      transform: 'translateX(-100px)',
+                      animation: 'shooting-trail 8s linear infinite',
+                    },
+                    '@keyframes shooting-star': {
+                      '0%': {
+                        transform: 'translateX(-100px) translateY(0px)',
+                        opacity: 0,
+                      },
+                      '10%': {
+                        opacity: 1,
+                      },
+                      '90%': {
+                        opacity: 1,
+                      },
+                      '100%': {
+                        transform: 'translateX(calc(100vw + 100px)) translateY(100px)',
+                        opacity: 0,
+                      },
+                    },
+                    '@keyframes shooting-trail': {
+                      '0%': {
+                        opacity: 0,
+                        transform: 'translateX(-100px) scaleX(0)',
+                      },
+                      '10%': {
+                        opacity: 1,
+                        transform: 'translateX(-50px) scaleX(1)',
+                      },
+                      '90%': {
+                        opacity: 1,
+                        transform: 'translateX(50px) scaleX(1)',
+                      },
+                      '100%': {
+                        opacity: 0,
+                        transform: 'translateX(100px) scaleX(0)',
+                      },
+                    },
+                  }}
+                />
+              ))}
+              
+              {/* Sparkle Stars */}
+              {[...Array(8)].map((_, i) => (
+                <Box
+                  key={`sparkle-star-${i}`}
+                  sx={{
+                    position: 'absolute',
+                    width: '4px',
+                    height: '4px',
+                    background: 'radial-gradient(circle, #FFFFFF 30%, rgba(139, 92, 246, 0.8) 70%)',
+                    borderRadius: '50%',
+                    animation: `sparkle ${5 + Math.random() * 3}s ease-in-out infinite, sparkle-float ${7 + Math.random() * 4}s ease-in-out infinite`,
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                    animationDelay: `${Math.random() * 5}s`,
+                    '@keyframes sparkle': {
+                      '0%, 100%': {
+                        opacity: 0.2,
+                        transform: 'scale(0.5) rotate(0deg)',
+                        boxShadow: '0 0 4px rgba(255, 255, 255, 0.3)',
+                      },
+                      '25%': {
+                        opacity: 1,
+                        transform: 'scale(1.5) rotate(90deg)',
+                        boxShadow: '0 0 12px rgba(255, 255, 255, 0.8), 0 0 20px rgba(139, 92, 246, 0.6)',
+                      },
+                      '50%': {
+                        opacity: 0.8,
+                        transform: 'scale(1.2) rotate(180deg)',
+                        boxShadow: '0 0 8px rgba(255, 255, 255, 0.6)',
+                      },
+                      '75%': {
+                        opacity: 1,
+                        transform: 'scale(1.8) rotate(270deg)',
+                        boxShadow: '0 0 16px rgba(255, 255, 255, 0.9), 0 0 24px rgba(139, 92, 246, 0.8)',
+                      },
+                    },
+                    '@keyframes sparkle-float': {
+                      '0%, 100%': {
+                        transform: 'translateY(0px) translateX(0px)',
+                      },
+                      '20%': {
+                        transform: 'translateY(-20px) translateX(10px)',
+                      },
+                      '40%': {
+                        transform: 'translateY(-10px) translateX(-15px)',
+                      },
+                      '60%': {
+                        transform: 'translateY(-25px) translateX(5px)',
+                      },
+                      '80%': {
+                        transform: 'translateY(-5px) translateX(20px)',
+                      },
+                    },
+                  }}
+                />
+              ))}
+              
+              {/* Constellation Lines */}
+              <Box sx={{
+                position: 'absolute',
+                top: '20%',
+                left: '15%',
+                width: '200px',
+                height: '150px',
+                '&::before': {
+                  content: '""',
+                  position: 'absolute',
+                  width: '100%',
+                  height: '100%',
+                  background: `
+                    linear-gradient(45deg, transparent 40%, rgba(139, 92, 246, 0.1) 50%, transparent 60%),
+                    linear-gradient(-45deg, transparent 30%, rgba(139, 92, 246, 0.08) 40%, transparent 50%),
+                    linear-gradient(90deg, transparent 60%, rgba(139, 92, 246, 0.06) 70%, transparent 80%)
+                  `,
+                  animation: 'constellation-glow 6s ease-in-out infinite',
+                  '@keyframes constellation-glow': {
+                    '0%, 100%': { opacity: 0.3 },
+                    '50%': { opacity: 0.8 },
+                  },
+                },
+              }} />
+              
+              {/* Additional Constellation */}
+              <Box sx={{
+                position: 'absolute',
+                top: '60%',
+                right: '20%',
+                width: '150px',
+                height: '120px',
+                '&::before': {
+                  content: '""',
+                  position: 'absolute',
+                  width: '100%',
+                  height: '100%',
+                  background: `
+                    linear-gradient(135deg, transparent 35%, rgba(167, 139, 250, 0.12) 45%, transparent 55%),
+                    linear-gradient(225deg, transparent 25%, rgba(139, 92, 246, 0.09) 35%, transparent 45%)
+                  `,
+                  animation: 'constellation-glow 8s ease-in-out infinite',
+                  animationDelay: '2s',
+                },
+              }} />
+            </Box>
 
             {/* banners section */}
             {
                 !is600 && 
-            <Stack sx={{width:"100%",height:is800?"300px":is1200?"400px":"500px"}}>
+            <Stack sx={{width:"100%",height:is800?"300px":is1200?"400px":"500px", position: 'relative', zIndex: 2}}>
                 <ProductBanner />
             </Stack>
             }
@@ -766,7 +1334,7 @@ export const ProductList = () => {
             </Stack>
 
                 {/* products */}
-                <Stack rowGap={5} mt={is600?2:0}>
+                <Stack rowGap={5} mt={is600?2:0} sx={{ position: 'relative', zIndex: 2 }}>
 
                     {/* sort options */}
                     <Stack flexDirection={'row'} mr={'2rem'} justifyContent={'flex-end'} alignItems={'center'} columnGap={5}>

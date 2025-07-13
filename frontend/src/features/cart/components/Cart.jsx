@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { CartItem } from './CartItem'
-import { Button, Chip, Paper, Stack, Typography, useMediaQuery, useTheme, Fab, Badge } from '@mui/material'
+import { Button, Chip, Paper, Stack, Typography, useMediaQuery, useTheme, Fab, Badge, Box } from '@mui/material'
 import { resetCartItemRemoveStatus, selectCartItemRemoveStatus, selectCartItems } from '../CartSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
@@ -55,14 +55,117 @@ export const Cart = ({checkout}) => {
     <Stack 
       justifyContent={'flex-start'} 
       alignItems={'center'} 
-      mb={'5rem'} 
       sx={{
         minHeight: '100vh', 
-        background: 'linear-gradient(135deg, #0F0F23 0%, #1A1A2E 50%, #16213E 100%)',
+        background: 'linear-gradient(135deg, #0A0A1A 0%, #1A0B2E 25%, #2D1B69 50%, #1A0B2E 75%, #0A0A1A 100%)',
         color: '#FFFFFF',
-        pt: 4
+        pt: 4,
+        pb: '5rem',
+        position: 'relative',
+        overflow: 'hidden',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: `
+            radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(167, 139, 250, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 40% 40%, rgba(124, 58, 237, 0.08) 0%, transparent 50%),
+            radial-gradient(circle at 60% 60%, rgba(168, 85, 247, 0.05) 0%, transparent 50%),
+            radial-gradient(circle at 10% 30%, rgba(147, 51, 234, 0.06) 0%, transparent 50%)
+          `,
+          pointerEvents: 'none',
+          zIndex: 0,
+        },
+        '&::after': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: `
+            url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%238B5CF6' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
+            url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23A78BFA' fill-opacity='0.02'%3E%3Ccircle cx='60' cy='60' r='1.5'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
+            url("data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C4B5FD' fill-opacity='0.015'%3E%3Ccircle cx='90' cy='90' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
+          `,
+          pointerEvents: 'none',
+          zIndex: 0,
+        }
       }}
     >
+      {/* Animated Stars Background */}
+      <Box sx={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        overflow: 'hidden',
+        pointerEvents: 'none',
+        zIndex: 1,
+      }}>
+        {/* Small Stars */}
+        {[...Array(20)].map((_, i) => (
+          <Box
+            key={`cart-star-${i}`}
+            sx={{
+              position: 'absolute',
+              width: '1px',
+              height: '1px',
+              background: '#A78BFA',
+              borderRadius: '50%',
+              animation: `cart-twinkle ${2 + Math.random() * 2}s ease-in-out infinite`,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 2}s`,
+              '@keyframes cart-twinkle': {
+                '0%, 100%': {
+                  opacity: 0.2,
+                  transform: 'scale(1)',
+                },
+                '50%': {
+                  opacity: 1,
+                  transform: 'scale(1.5)',
+                },
+              },
+            }}
+          />
+        ))}
+        
+        {/* Sparkle Stars */}
+        {[...Array(6)].map((_, i) => (
+          <Box
+            key={`cart-sparkle-${i}`}
+            sx={{
+              position: 'absolute',
+              width: '2px',
+              height: '2px',
+              background: 'radial-gradient(circle, #FFFFFF 30%, rgba(139, 92, 246, 0.8) 70%)',
+              borderRadius: '50%',
+              animation: `cart-sparkle ${4 + Math.random() * 2}s ease-in-out infinite`,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`,
+              '@keyframes cart-sparkle': {
+                '0%, 100%': {
+                  opacity: 0.3,
+                  transform: 'scale(0.8) rotate(0deg)',
+                  boxShadow: '0 0 4px rgba(255, 255, 255, 0.3)',
+                },
+                '50%': {
+                  opacity: 1,
+                  transform: 'scale(1.3) rotate(180deg)',
+                  boxShadow: '0 0 8px rgba(255, 255, 255, 0.8), 0 0 12px rgba(139, 92, 246, 0.6)',
+                },
+              },
+            }}
+          />
+        ))}
+      </Box>
 
         <Stack 
           width={is900?'auto':'50rem'} 
@@ -70,7 +173,7 @@ export const Cart = ({checkout}) => {
           paddingLeft={checkout?0:3} 
           paddingRight={checkout?0:3} 
           rowGap={4} 
-          sx={{maxWidth: '100%'}}
+          sx={{maxWidth: '100%', position: 'relative', zIndex: 2}}
         >
 
             {/* cart items */}

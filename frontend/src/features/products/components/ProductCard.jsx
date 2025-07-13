@@ -155,22 +155,22 @@ export const ProductCard = ({id,title,thumbnail,brand,price,handleAddRemoveFromW
                           whileTap={{scale:1}} 
                           onClick={(e)=>handleAddToCart(e, id)} 
                           style={{
-                            padding: is408 ? "6px 10px" : is488 ? "5px 8px" : is500 ? "6px 12px" : "8px 16px",
-                            borderRadius:"8px",
+                            padding: is408 ? "4px 8px" : is488 ? "3px 6px" : is500 ? "4px 10px" : "6px 12px",
+                            borderRadius:"6px",
                             outline:"none",
                             border:"none",
                             cursor:"pointer",
                             background:"linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)",
                             color:"white",
-                            fontSize: is408?'.7rem':is488?'.65rem':is500?'.7rem':'.8rem',
+                            fontSize: is408?'.6rem':is488?'.55rem':is500?'.6rem':'.7rem',
                             fontWeight: 600,
-                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
                             transition: 'all 0.2s ease'
                           }}
                         >
-                            <div style={{display:"flex",alignItems:"center",columnGap:".3rem"}}>
-                                <ShoppingCartIcon sx={{ fontSize: is408 ? '0.7rem' : '0.8rem' }} />
-                                <span>Add To Cart</span>
+                            <div style={{display:"flex",alignItems:"center",columnGap:".2rem"}}>
+                                <ShoppingCartIcon sx={{ fontSize: is408 ? '0.6rem' : '0.7rem' }} />
+                                <span>Add</span>
                             </div>
                         </motion.button>
                         :''

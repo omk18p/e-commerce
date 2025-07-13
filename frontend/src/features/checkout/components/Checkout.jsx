@@ -19,7 +19,8 @@ export const Checkout = () => {
     const status=''
     const addresses=useSelector(selectAddresses)
     const [selectedAddress,setSelectedAddress]=useState(addresses[0])
-    const [selectedPaymentMethod,setSelectedPaymentMethod]=useState('cash')
+    const [selectedPaymentMethod,setSelectedPaymentMethod]=useState('')
+    const [hasSelectedPayment,setHasSelectedPayment]=useState(false)
     const { register, handleSubmit, watch, reset,formState: { errors }} = useForm()
     const dispatch=useDispatch()
     const loggedInUser=useSelector(selectLoggedInUser)
@@ -49,12 +50,28 @@ export const Checkout = () => {
         }
     },[currentOrder])
     
+    // Set default payment method
+    useEffect(() => {
+        if (!hasSelectedPayment) {
+            setSelectedPaymentMethod('COD')
+            setHasSelectedPayment(true)
+        }
+    }, [])
+    
     const handleAddAddress=(data)=>{
         const address={...data,user:loggedInUser._id}
         dispatch(addAddressAsync(address))
     }
 
     const handleCreateOrder=()=>{
+        if (!selectedAddress) {
+            alert('Please select an address first')
+            return
+        }
+        if (!hasSelectedPayment) {
+            alert('Please select a payment method first')
+            return
+        }
         const order={user:loggedInUser._id,item:cartItems,address:selectedAddress,paymentMode:selectedPaymentMethod,total:orderTotal+SHIPPING+TAXES}
         dispatch(createOrderAsync(order))
     }
@@ -63,22 +80,125 @@ export const Checkout = () => {
     <Stack 
       sx={{
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%)',
+        background: 'linear-gradient(135deg, #0A0A1A 0%, #1A0B2E 25%, #2D1B69 50%, #1A0B2E 75%, #0A0A1A 100%)',
         color: '#ffffff',
         p: 2,
-        pt: 4
+        pt: 4,
+        position: 'relative',
+        overflow: 'hidden',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: `
+            radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(167, 139, 250, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 40% 40%, rgba(124, 58, 237, 0.08) 0%, transparent 50%),
+            radial-gradient(circle at 60% 60%, rgba(168, 85, 247, 0.05) 0%, transparent 50%),
+            radial-gradient(circle at 10% 30%, rgba(147, 51, 234, 0.06) 0%, transparent 50%)
+          `,
+          pointerEvents: 'none',
+          zIndex: 0,
+        },
+        '&::after': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: `
+            url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%238B5CF6' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
+            url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23A78BFA' fill-opacity='0.02'%3E%3Ccircle cx='60' cy='60' r='1.5'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
+            url("data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C4B5FD' fill-opacity='0.015'%3E%3Ccircle cx='90' cy='90' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
+          `,
+          pointerEvents: 'none',
+          zIndex: 0,
+        }
       }}
       flexDirection={'row'} 
       rowGap={10} 
       justifyContent={'center'} 
       flexWrap={'wrap'} 
-      mb={'5rem'} 
+      pb={'5rem'} 
       columnGap={4} 
       alignItems={'flex-start'}
     >
+      {/* Animated Stars Background */}
+      <Box sx={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        overflow: 'hidden',
+        pointerEvents: 'none',
+        zIndex: 1,
+      }}>
+        {/* Small Stars */}
+        {[...Array(25)].map((_, i) => (
+          <Box
+            key={`checkout-star-${i}`}
+            sx={{
+              position: 'absolute',
+              width: '1px',
+              height: '1px',
+              background: '#A78BFA',
+              borderRadius: '50%',
+              animation: `checkout-twinkle ${2 + Math.random() * 2}s ease-in-out infinite`,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 2}s`,
+              '@keyframes checkout-twinkle': {
+                '0%, 100%': {
+                  opacity: 0.2,
+                  transform: 'scale(1)',
+                },
+                '50%': {
+                  opacity: 1,
+                  transform: 'scale(1.5)',
+                },
+              },
+            }}
+          />
+        ))}
+        
+        {/* Sparkle Stars */}
+        {[...Array(8)].map((_, i) => (
+          <Box
+            key={`checkout-sparkle-${i}`}
+            sx={{
+              position: 'absolute',
+              width: '2px',
+              height: '2px',
+              background: 'radial-gradient(circle, #FFFFFF 30%, rgba(139, 92, 246, 0.8) 70%)',
+              borderRadius: '50%',
+              animation: `checkout-sparkle ${4 + Math.random() * 2}s ease-in-out infinite`,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`,
+              '@keyframes checkout-sparkle': {
+                '0%, 100%': {
+                  opacity: 0.3,
+                  transform: 'scale(0.8) rotate(0deg)',
+                  boxShadow: '0 0 4px rgba(255, 255, 255, 0.3)',
+                },
+                '50%': {
+                  opacity: 1,
+                  transform: 'scale(1.3) rotate(180deg)',
+                  boxShadow: '0 0 8px rgba(255, 255, 255, 0.8), 0 0 12px rgba(139, 92, 246, 0.6)',
+                },
+              },
+            }}
+          />
+        ))}
+      </Box>
 
         {/* left box */}
-        <Stack rowGap={4} sx={{ width: is900 ? '100%' : 'auto' }}>
+        <Stack rowGap={4} sx={{ width: is900 ? '100%' : 'auto', position: 'relative', zIndex: 2 }}>
 
             {/* heading */}
             <Stack flexDirection={'row'} columnGap={is480?0.3:1} alignItems={'center'}>
@@ -87,10 +207,11 @@ export const Checkout = () => {
                       component={Link} 
                       to={"/cart"}
                       sx={{
-                        color: '#00d4ff',
+                        color: '#8B5CF6',
                         '&:hover': {
-                          background: 'rgba(0, 212, 255, 0.1)',
-                          transform: 'scale(1.1)'
+                          color: '#A78BFA',
+                          transform: 'scale(1.1)',
+                          background: 'rgba(139, 92, 246, 0.1)',
                         }
                       }}
                     >
@@ -100,12 +221,12 @@ export const Checkout = () => {
                 <Typography 
                   variant='h4' 
                   sx={{
-                    background: 'linear-gradient(45deg, #00d4ff, #ff6b6b)',
+                    background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
                     backgroundClip: 'text',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     fontWeight: 700,
-                    textShadow: '0 0 20px rgba(0, 212, 255, 0.3)'
+                    textShadow: '0 0 20px rgba(139, 92, 246, 0.3)'
                   }}
                 >
                   Shipping Information
@@ -119,35 +240,35 @@ export const Checkout = () => {
               rowGap={2} 
               onSubmit={handleSubmit(handleAddAddress)}
               sx={{
-                background: 'rgba(255, 255, 255, 0.05)',
+                background: 'rgba(26, 26, 46, 0.85)',
                 backdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
+                border: '1px solid rgba(139, 92, 246, 0.2)',
                 borderRadius: 3,
                 p: 3,
                 boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-                borderTop: '1px solid rgba(255, 255, 255, 0.2)',
-                borderLeft: '1px solid rgba(255, 255, 255, 0.1)'
               }}
             >
                     <Stack>
-                        <Typography sx={{ color: '#ffffff', fontWeight: 600, mb: 1 }} gutterBottom>Type</Typography>
+                        <Typography sx={{ color: '#E0E7FF', fontWeight: 600, mb: 1 }} gutterBottom>Type</Typography>
                         <TextField 
                           placeholder='Eg. Home, Business' 
                           {...register("type",{required:true})}
                           sx={{
                             '& .MuiOutlinedInput-root': {
-                              color: '#ffffff',
-                              '& fieldset': {
-                                borderColor: 'rgba(255, 255, 255, 0.3)',
+                              color: '#FFFFFF',
+                              borderRadius: 2,
+                              background: 'rgba(15, 15, 35, 0.6)',
+                              backdropFilter: 'blur(10px)',
+                              border: '1px solid rgba(255, 255, 255, 0.1)',
+                              '&:hover .MuiOutlinedInput-notchedOutline': {
+                                borderColor: '#8B5CF6',
                               },
-                              '&:hover fieldset': {
-                                borderColor: '#00d4ff',
-                              },
-                              '&.Mui-focused fieldset': {
-                                borderColor: '#00d4ff',
+                              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                borderColor: '#8B5CF6',
+                                borderWidth: 2,
                               },
                               '& input::placeholder': {
-                                color: 'rgba(255, 255, 255, 0.6)',
+                                color: '#94A3B8',
                               }
                             }
                           }}
@@ -155,23 +276,25 @@ export const Checkout = () => {
                     </Stack>
 
                     <Stack>
-                        <Typography sx={{ color: '#ffffff', fontWeight: 600, mb: 1 }} gutterBottom>Street</Typography>
+                        <Typography sx={{ color: '#E0E7FF', fontWeight: 600, mb: 1 }} gutterBottom>Street</Typography>
                         <TextField 
                           {...register("street",{required:true})}
                           sx={{
                             '& .MuiOutlinedInput-root': {
-                              color: '#ffffff',
-                              '& fieldset': {
-                                borderColor: 'rgba(255, 255, 255, 0.3)',
+                              color: '#FFFFFF',
+                              borderRadius: 2,
+                              background: 'rgba(15, 15, 35, 0.6)',
+                              backdropFilter: 'blur(10px)',
+                              border: '1px solid rgba(255, 255, 255, 0.1)',
+                              '&:hover .MuiOutlinedInput-notchedOutline': {
+                                borderColor: '#8B5CF6',
                               },
-                              '&:hover fieldset': {
-                                borderColor: '#00d4ff',
-                              },
-                              '&.Mui-focused fieldset': {
-                                borderColor: '#00d4ff',
+                              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                borderColor: '#8B5CF6',
+                                borderWidth: 2,
                               },
                               '& input::placeholder': {
-                                color: 'rgba(255, 255, 255, 0.6)',
+                                color: '#94A3B8',
                               }
                             }
                           }}
@@ -179,23 +302,25 @@ export const Checkout = () => {
                     </Stack>
 
                     <Stack>
-                        <Typography sx={{ color: '#ffffff', fontWeight: 600, mb: 1 }} gutterBottom>Country</Typography>
+                        <Typography sx={{ color: '#E0E7FF', fontWeight: 600, mb: 1 }} gutterBottom>Country</Typography>
                         <TextField 
                           {...register("country",{required:true})}
                           sx={{
                             '& .MuiOutlinedInput-root': {
-                              color: '#ffffff',
-                              '& fieldset': {
-                                borderColor: 'rgba(255, 255, 255, 0.3)',
+                              color: '#FFFFFF',
+                              borderRadius: 2,
+                              background: 'rgba(15, 15, 35, 0.6)',
+                              backdropFilter: 'blur(10px)',
+                              border: '1px solid rgba(255, 255, 255, 0.1)',
+                              '&:hover .MuiOutlinedInput-notchedOutline': {
+                                borderColor: '#8B5CF6',
                               },
-                              '&:hover fieldset': {
-                                borderColor: '#00d4ff',
-                              },
-                              '&.Mui-focused fieldset': {
-                                borderColor: '#00d4ff',
+                              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                borderColor: '#8B5CF6',
+                                borderWidth: 2,
                               },
                               '& input::placeholder': {
-                                color: 'rgba(255, 255, 255, 0.6)',
+                                color: '#94A3B8',
                               }
                             }
                           }}
@@ -203,24 +328,26 @@ export const Checkout = () => {
                     </Stack>
 
                     <Stack>
-                        <Typography sx={{ color: '#ffffff', fontWeight: 600, mb: 1 }} gutterBottom>Phone Number</Typography>
+                        <Typography sx={{ color: '#E0E7FF', fontWeight: 600, mb: 1 }} gutterBottom>Phone Number</Typography>
                         <TextField 
                           type='number' 
                           {...register("phoneNumber",{required:true})}
                           sx={{
                             '& .MuiOutlinedInput-root': {
-                              color: '#ffffff',
-                              '& fieldset': {
-                                borderColor: 'rgba(255, 255, 255, 0.3)',
+                              color: '#FFFFFF',
+                              borderRadius: 2,
+                              background: 'rgba(15, 15, 35, 0.6)',
+                              backdropFilter: 'blur(10px)',
+                              border: '1px solid rgba(255, 255, 255, 0.1)',
+                              '&:hover .MuiOutlinedInput-notchedOutline': {
+                                borderColor: '#8B5CF6',
                               },
-                              '&:hover fieldset': {
-                                borderColor: '#00d4ff',
-                              },
-                              '&.Mui-focused fieldset': {
-                                borderColor: '#00d4ff',
+                              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                borderColor: '#8B5CF6',
+                                borderWidth: 2,
                               },
                               '& input::placeholder': {
-                                color: 'rgba(255, 255, 255, 0.6)',
+                                color: '#94A3B8',
                               }
                             }
                           }}
@@ -229,70 +356,76 @@ export const Checkout = () => {
 
                     <Stack flexDirection={'row'} columnGap={2}>
                         <Stack width={'100%'}>
-                            <Typography sx={{ color: '#ffffff', fontWeight: 600, mb: 1 }} gutterBottom>City</Typography>
+                            <Typography sx={{ color: '#E0E7FF', fontWeight: 600, mb: 1 }} gutterBottom>City</Typography>
                             <TextField  
                               {...register("city",{required:true})}
                               sx={{
                                 '& .MuiOutlinedInput-root': {
-                                  color: '#ffffff',
-                                  '& fieldset': {
-                                    borderColor: 'rgba(255, 255, 255, 0.3)',
+                                  color: '#FFFFFF',
+                                  borderRadius: 2,
+                                  background: 'rgba(15, 15, 35, 0.6)',
+                                  backdropFilter: 'blur(10px)',
+                                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                                  '&:hover .MuiOutlinedInput-notchedOutline': {
+                                    borderColor: '#8B5CF6',
                                   },
-                                  '&:hover fieldset': {
-                                    borderColor: '#00d4ff',
-                                  },
-                                  '&.Mui-focused fieldset': {
-                                    borderColor: '#00d4ff',
+                                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                    borderColor: '#8B5CF6',
+                                    borderWidth: 2,
                                   },
                                   '& input::placeholder': {
-                                    color: 'rgba(255, 255, 255, 0.6)',
+                                    color: '#94A3B8',
                                   }
                                 }
                               }}
                             />
                         </Stack>
                         <Stack width={'100%'}>
-                            <Typography sx={{ color: '#ffffff', fontWeight: 600, mb: 1 }} gutterBottom>State</Typography>
+                            <Typography sx={{ color: '#E0E7FF', fontWeight: 600, mb: 1 }} gutterBottom>State</Typography>
                             <TextField  
                               {...register("state",{required:true})}
                               sx={{
                                 '& .MuiOutlinedInput-root': {
-                                  color: '#ffffff',
-                                  '& fieldset': {
-                                    borderColor: 'rgba(255, 255, 255, 0.3)',
+                                  color: '#FFFFFF',
+                                  borderRadius: 2,
+                                  background: 'rgba(15, 15, 35, 0.6)',
+                                  backdropFilter: 'blur(10px)',
+                                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                                  '&:hover .MuiOutlinedInput-notchedOutline': {
+                                    borderColor: '#8B5CF6',
                                   },
-                                  '&:hover fieldset': {
-                                    borderColor: '#00d4ff',
-                                  },
-                                  '&.Mui-focused fieldset': {
-                                    borderColor: '#00d4ff',
+                                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                    borderColor: '#8B5CF6',
+                                    borderWidth: 2,
                                   },
                                   '& input::placeholder': {
-                                    color: 'rgba(255, 255, 255, 0.6)',
+                                    color: '#94A3B8',
                                   }
                                 }
                               }}
                             />
                         </Stack>
                         <Stack width={'100%'}>
-                            <Typography sx={{ color: '#ffffff', fontWeight: 600, mb: 1 }} gutterBottom>Postal Code</Typography>
+                            <Typography sx={{ color: '#E0E7FF', fontWeight: 600, mb: 1 }} gutterBottom>Postal Code</Typography>
                             <TextField 
                               type='number' 
                               {...register("postalCode",{required:true})}
                               sx={{
                                 '& .MuiOutlinedInput-root': {
-                                  color: '#ffffff',
-                                  '& fieldset': {
-                                    borderColor: 'rgba(255, 255, 255, 0.3)',
+                                  color: '#FFFFFF',
+                                  borderRadius: 2,
+                                  background: 'rgba(15, 15, 35, 0.6)',
+                                  backdropFilter: 'blur(10px)',
+                                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                                  '&:hover .MuiOutlinedInput-notchedOutline': {
+                                    borderColor: '#8B5CF6',
                                   },
-                                  '&:hover fieldset': {
-                                    borderColor: '#00d4ff',
-                                  },
-                                  '&.Mui-focused fieldset': {
-                                    borderColor: '#00d4ff',
+                                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                    borderColor: '#8B5CF6',
+                                    borderWidth: 2,
                                   },
                                   '& input::placeholder': {
-                                    color: 'rgba(255, 255, 255, 0.6)',
+                                    color: '#94A3B8',
                                   }
                                 }
                               }}
@@ -306,13 +439,13 @@ export const Checkout = () => {
                           type='submit' 
                           variant='contained'
                           sx={{
-                            background: 'linear-gradient(45deg, #00d4ff, #0099cc)',
-                            color: '#ffffff',
+                            background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
+                            color: '#FFFFFF',
                             fontWeight: 600,
                             '&:hover': {
-                              background: 'linear-gradient(45deg, #0099cc, #00d4ff)',
+                              background: 'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%)',
                               transform: 'translateY(-2px)',
-                              boxShadow: '0 8px 25px rgba(0, 212, 255, 0.4)'
+                              boxShadow: '0 8px 25px rgba(139, 92, 246, 0.4)'
                             }
                           }}
                         >
@@ -323,11 +456,12 @@ export const Checkout = () => {
                           variant='outlined' 
                           onClick={()=>reset()}
                           sx={{
-                            borderColor: '#ff6b6b',
-                            color: '#ff6b6b',
+                            borderColor: '#EF4444',
+                            color: '#EF4444',
                             '&:hover': {
-                              borderColor: '#ff4757',
-                              background: 'rgba(255, 107, 107, 0.1)'
+                              borderColor: '#F87171',
+                              color: '#F87171',
+                              background: 'rgba(239, 68, 68, 0.1)'
                             }
                           }}
                         >
@@ -343,9 +477,9 @@ export const Checkout = () => {
                     <Typography 
                       variant='h6' 
                       sx={{ 
-                        color: '#ffffff', 
+                        color: '#FFFFFF', 
                         fontWeight: 600,
-                        background: 'linear-gradient(45deg, #00d4ff, #ff6b6b)',
+                        background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
                         backgroundClip: 'text',
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent'
@@ -353,7 +487,12 @@ export const Checkout = () => {
                     >
                       Address
                     </Typography>
-                    <Typography sx={{ color: 'rgba(255, 255, 255, 0.7)' }} variant='body2'>Choose from existing Addresses</Typography>
+                    <Typography sx={{ color: '#94A3B8' }} variant='body2'>Choose from existing Addresses</Typography>
+                    {!selectedAddress && (
+                      <Typography sx={{ color: '#EF4444', fontSize: '0.9rem', mt: 1 }} variant='body2'>
+                        ⚠️ Please select an address first
+                      </Typography>
+                    )}
                 </Stack>
 
                 <Grid container gap={2} width={is900?"auto":'50rem'} justifyContent={'flex-start'} alignContent={'flex-start'}>
@@ -368,18 +507,16 @@ export const Checkout = () => {
                                       component={Paper} 
                                       elevation={0}
                                       sx={{
-                                        background: 'rgba(255, 255, 255, 0.05)',
+                                        background: 'rgba(26, 26, 46, 0.85)',
                                         backdropFilter: 'blur(20px)',
-                                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                                        border: '1px solid rgba(139, 92, 246, 0.2)',
                                         borderRadius: 2,
                                         boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-                                        borderTop: '1px solid rgba(255, 255, 255, 0.2)',
-                                        borderLeft: '1px solid rgba(255, 255, 255, 0.1)',
                                         transition: 'all 0.3s ease',
                                         '&:hover': {
                                           transform: 'translateY(-5px)',
-                                          boxShadow: '0 12px 40px rgba(0, 212, 255, 0.2)',
-                                          borderColor: '#00d4ff'
+                                          boxShadow: '0 12px 40px rgba(139, 92, 246, 0.2)',
+                                          borderColor: '#8B5CF6'
                                         }
                                       }}
                                     >
@@ -391,20 +528,20 @@ export const Checkout = () => {
                                               value={selectedAddress} 
                                               onChange={(e)=>setSelectedAddress(addresses[index])}
                                               sx={{
-                                                color: '#00d4ff',
+                                                color: '#8B5CF6',
                                                 '&.Mui-checked': {
-                                                  color: '#00d4ff',
+                                                  color: '#8B5CF6',
                                                 }
                                               }}
                                             />
-                                            <Typography sx={{ color: '#ffffff', fontWeight: 600 }}>{address.type}</Typography>
+                                            <Typography sx={{ color: '#FFFFFF', fontWeight: 600 }}>{address.type}</Typography>
                                         </Stack>
 
                                         {/* details */}
                                         <Stack>
-                                            <Typography sx={{ color: '#ffffff' }}>{address.street}</Typography>
-                                            <Typography sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>{address.state}, {address.city}, {address.country}, {address.postalCode}</Typography>
-                                            <Typography sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>{address.phoneNumber}</Typography>
+                                            <Typography sx={{ color: '#FFFFFF' }}>{address.street}</Typography>
+                                            <Typography sx={{ color: '#94A3B8' }}>{address.state}, {address.city}, {address.country}, {address.postalCode}</Typography>
+                                            <Typography sx={{ color: '#94A3B8' }}>{address.phoneNumber}</Typography>
                                         </Stack>
                                     </Stack>
                                 </FormControl>
@@ -421,9 +558,9 @@ export const Checkout = () => {
                         <Typography 
                           variant='h6' 
                           sx={{ 
-                            color: '#ffffff', 
+                            color: '#FFFFFF', 
                             fontWeight: 600,
-                            background: 'linear-gradient(45deg, #00d4ff, #ff6b6b)',
+                            background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
                             backgroundClip: 'text',
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent'
@@ -431,15 +568,20 @@ export const Checkout = () => {
                         >
                           Payment Methods
                         </Typography>
-                        <Typography sx={{ color: 'rgba(255, 255, 255, 0.7)' }} variant='body2'>Please select a payment method</Typography>
+                        <Typography sx={{ color: '#94A3B8' }} variant='body2'>Please select a payment method</Typography>
+                        {!hasSelectedPayment && (
+                          <Typography sx={{ color: '#EF4444', fontSize: '0.9rem', mt: 1 }} variant='body2'>
+                            ⚠️ Please select a payment method first
+                          </Typography>
+                        )}
                     </Stack>
                     
                     <Stack 
                       rowGap={2}
                       sx={{
-                        background: 'rgba(255, 255, 255, 0.05)',
+                        background: 'rgba(26, 26, 46, 0.85)',
                         backdropFilter: 'blur(20px)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        border: '1px solid rgba(139, 92, 246, 0.2)',
                         borderRadius: 2,
                         p: 3,
                         boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
@@ -451,15 +593,18 @@ export const Checkout = () => {
                               value={selectedPaymentMethod} 
                               name='paymentMethod' 
                               checked={selectedPaymentMethod==='COD'} 
-                              onChange={()=>setSelectedPaymentMethod('COD')}
+                              onChange={()=>{
+                                setSelectedPaymentMethod('COD')
+                                setHasSelectedPayment(true)
+                              }}
                               sx={{
-                                color: '#00d4ff',
+                                color: '#8B5CF6',
                                 '&.Mui-checked': {
-                                  color: '#00d4ff',
+                                  color: '#8B5CF6',
                                 }
                               }}
                             />
-                            <Typography sx={{ color: '#ffffff', fontWeight: 500 }}>Cash on Delivery</Typography>
+                            <Typography sx={{ color: '#FFFFFF', fontWeight: 500 }}>Cash on Delivery</Typography>
                         </Stack>
 
                         <Stack flexDirection={'row'} justifyContent={'flex-start'} alignItems={'center'}>
@@ -467,15 +612,18 @@ export const Checkout = () => {
                               value={selectedPaymentMethod} 
                               name='paymentMethod' 
                               checked={selectedPaymentMethod==='CARD'} 
-                              onChange={()=>setSelectedPaymentMethod('CARD')}
+                              onChange={()=>{
+                                setSelectedPaymentMethod('CARD')
+                                setHasSelectedPayment(true)
+                              }}
                               sx={{
-                                color: '#00d4ff',
+                                color: '#8B5CF6',
                                 '&.Mui-checked': {
-                                  color: '#00d4ff',
+                                  color: '#8B5CF6',
                                 }
                               }}
                             />
-                            <Typography sx={{ color: '#ffffff', fontWeight: 500 }}>Credit/Debit Card</Typography>
+                            <Typography sx={{ color: '#FFFFFF', fontWeight: 500 }}>Credit/Debit Card</Typography>
                         </Stack>
 
                     </Stack>
@@ -489,20 +637,20 @@ export const Checkout = () => {
           width={is900?'100%':'auto'} 
           alignItems={is900?'flex-start':''}
           sx={{
-            background: 'rgba(255, 255, 255, 0.05)',
+            background: 'rgba(26, 26, 46, 0.85)',
             backdropFilter: 'blur(20px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            border: '1px solid rgba(139, 92, 246, 0.2)',
             borderRadius: 3,
             p: 3,
             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-            borderTop: '1px solid rgba(255, 255, 255, 0.2)',
-            borderLeft: '1px solid rgba(255, 255, 255, 0.1)'
+            position: 'relative',
+            zIndex: 2
           }}
         >
             <Typography 
               variant='h4' 
               sx={{
-                background: 'linear-gradient(45deg, #00d4ff, #ff6b6b)',
+                background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
                 backgroundClip: 'text',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
@@ -519,21 +667,29 @@ export const Checkout = () => {
               variant='contained' 
               onClick={handleCreateOrder} 
               size='large'
+              disabled={!selectedAddress || !hasSelectedPayment}
               sx={{
-                background: 'linear-gradient(45deg, #00d4ff, #0099cc)',
-                color: '#ffffff',
+                background: !selectedAddress || !hasSelectedPayment 
+                  ? 'linear-gradient(135deg, #64748B 0%, #94A3B8 100%)' 
+                  : 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
+                color: '#FFFFFF',
                 fontWeight: 600,
                 mt: 2,
                 height: 56,
                 fontSize: '1.1rem',
                 '&:hover': {
-                  background: 'linear-gradient(45deg, #0099cc, #00d4ff)',
-                  transform: 'translateY(-2px)',
-                  boxShadow: '0 8px 25px rgba(0, 212, 255, 0.4)'
+                  background: !selectedAddress || !hasSelectedPayment 
+                    ? 'linear-gradient(135deg, #64748B 0%, #94A3B8 100%)' 
+                    : 'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%)',
+                  transform: !selectedAddress || !hasSelectedPayment ? 'none' : 'translateY(-2px)',
+                  boxShadow: !selectedAddress || !hasSelectedPayment ? 'none' : '0 8px 25px rgba(139, 92, 246, 0.4)'
                 }
               }}
             >
-              Pay and Order
+              {!selectedAddress || !hasSelectedPayment 
+                ? 'Please select address and payment method' 
+                : 'Pay and Order'
+              }
             </LoadingButton>
         </Stack>
 

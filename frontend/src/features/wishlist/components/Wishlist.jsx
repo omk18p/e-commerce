@@ -136,22 +136,160 @@ export const Wishlist = () => {
 
   return (
     // parent
-    <Stack justifyContent={'flex-start'} mt={is480?3:5} mb={'14rem'} alignItems={'center'}>
+    <Stack 
+      justifyContent={'flex-start'} 
+      alignItems={'center'}
+      sx={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #0A0A1A 0%, #1A0B2E 25%, #2D1B69 50%, #1A0B2E 75%, #0A0A1A 100%)',
+        color: '#FFFFFF',
+        position: 'relative',
+        overflow: 'hidden',
+        paddingTop: is480 ? 3 : 5,
+        paddingBottom: '14rem',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: `
+            radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(167, 139, 250, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 40% 40%, rgba(124, 58, 237, 0.08) 0%, transparent 50%),
+            radial-gradient(circle at 60% 60%, rgba(168, 85, 247, 0.05) 0%, transparent 50%),
+            radial-gradient(circle at 10% 30%, rgba(147, 51, 234, 0.06) 0%, transparent 50%)
+          `,
+          pointerEvents: 'none',
+          zIndex: 0,
+        },
+        '&::after': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: `
+            url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%238B5CF6' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
+            url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23A78BFA' fill-opacity='0.02'%3E%3Ccircle cx='60' cy='60' r='1.5'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
+            url("data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C4B5FD' fill-opacity='0.015'%3E%3Ccircle cx='90' cy='90' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
+          `,
+          pointerEvents: 'none',
+          zIndex: 0,
+        }
+      }}
+    >
+      {/* Animated Stars Background */}
+      <Box sx={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        overflow: 'hidden',
+        pointerEvents: 'none',
+        zIndex: 1,
+      }}>
+        {/* Small Stars */}
+        {[...Array(18)].map((_, i) => (
+          <Box
+            key={`wishlist-star-${i}`}
+            sx={{
+              position: 'absolute',
+              width: '1px',
+              height: '1px',
+              background: '#A78BFA',
+              borderRadius: '50%',
+              animation: `wishlist-twinkle ${2 + Math.random() * 2}s ease-in-out infinite`,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 2}s`,
+              '@keyframes wishlist-twinkle': {
+                '0%, 100%': {
+                  opacity: 0.2,
+                  transform: 'scale(1)',
+                },
+                '50%': {
+                  opacity: 1,
+                  transform: 'scale(1.5)',
+                },
+              },
+            }}
+          />
+        ))}
+        
+        {/* Sparkle Stars */}
+        {[...Array(5)].map((_, i) => (
+          <Box
+            key={`wishlist-sparkle-${i}`}
+            sx={{
+              position: 'absolute',
+              width: '2px',
+              height: '2px',
+              background: 'radial-gradient(circle, #FFFFFF 30%, rgba(139, 92, 246, 0.8) 70%)',
+              borderRadius: '50%',
+              animation: `wishlist-sparkle ${4 + Math.random() * 2}s ease-in-out infinite`,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`,
+              '@keyframes wishlist-sparkle': {
+                '0%, 100%': {
+                  opacity: 0.3,
+                  transform: 'scale(0.8) rotate(0deg)',
+                  boxShadow: '0 0 4px rgba(255, 255, 255, 0.3)',
+                },
+                '50%': {
+                  opacity: 1,
+                  transform: 'scale(1.3) rotate(180deg)',
+                  boxShadow: '0 0 8px rgba(255, 255, 255, 0.8), 0 0 12px rgba(139, 92, 246, 0.6)',
+                },
+              },
+            }}
+          />
+        ))}
+      </Box>
+
         {
           wishlistFetchStatus==='pending'?
-          <Stack width={is480?'auto':'25rem'} height={'calc(100vh - 4rem)'} justifyContent={'center'} alignItems={'center'}>
+          <Stack width={is480?'auto':'25rem'} height={'calc(100vh - 4rem)'} justifyContent={'center'} alignItems={'center'} sx={{ position: 'relative', zIndex: 2 }}>
                 <Lottie animationData={loadingAnimation}/>
           </Stack>
           :
 
-        <Stack width={is1130?"auto":'70rem'} rowGap={is480?2:4}>
+        <Stack width={is1130?"auto":'70rem'} rowGap={is480?2:4} sx={{ position: 'relative', zIndex: 2 }}>
 
             {/* heading area and back button */}
             <Stack alignSelf={'flex-start'} flexDirection={'row'} columnGap={1} justifyContent={'center'} alignItems={'center'}>
                 <motion.div whileHover={{x:-5}}>
-                  <IconButton component={Link} to={'/'}><ArrowBackIcon fontSize={is480?'medium':'large'}/></IconButton>
+                  <IconButton 
+                    component={Link} 
+                    to={'/'}
+                    sx={{
+                      color: '#8B5CF6',
+                      '&:hover': {
+                        color: '#A78BFA',
+                        transform: 'scale(1.1)',
+                      }
+                    }}
+                  >
+                    <ArrowBackIcon fontSize={is480?'medium':'large'}/>
+                  </IconButton>
                 </motion.div>
-                <Typography variant='h4' fontWeight={500}>Your wishlist</Typography>
+                <Typography 
+                  variant='h4' 
+                  fontWeight={500}
+                  sx={{
+                    background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
+                    backgroundClip: 'text',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    textShadow: '0 2px 8px rgba(139, 92, 246, 0.3)',
+                  }}
+                >
+                  Your wishlist
+                </Typography>
             </Stack>
 
             {/* product grid */}
@@ -160,16 +298,47 @@ export const Wishlist = () => {
               {
                 !wishlistFetchStatus==='pending' && wishlistItems?.length===0?(
                   // empty wishlist animation
-                  <Stack minHeight={'60vh'} width={is642?'auto':'40rem'} justifySelf={'center'}  alignSelf={'center'} justifyContent={'center'} alignItems={'center'}>
+                  <Stack 
+                    minHeight={'60vh'} 
+                    width={is642?'auto':'40rem'} 
+                    justifySelf={'center'}  
+                    alignSelf={'center'} 
+                    justifyContent={'center'} 
+                    alignItems={'center'}
+                    sx={{
+                      background: 'rgba(26, 26, 46, 0.85)',
+                      backdropFilter: 'blur(20px)',
+                      border: '1px solid rgba(139, 92, 246, 0.2)',
+                      borderRadius: 3,
+                      p: 4,
+                      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+                    }}
+                  >
                     <Lottie animationData={emptyWishlistAnimation}/>
-                    <Typography variant='h6' fontWeight={300}>You have no items in your wishlist</Typography>
+                    <Typography 
+                      variant='h6' 
+                      fontWeight={300}
+                      sx={{ color: '#E0E7FF', textAlign: 'center' }}
+                    >
+                      You have no items in your wishlist
+                    </Typography>
                   </Stack>
                 ):
                 // wishlist grid
                 <Grid container gap={1} justifyContent={'center'} alignContent={'center'}>
                   {
                     wishlistItems.map((item,index)=>(
-                      <Stack component={is480?"":Paper} elevation={1} >
+                      <Stack 
+                        component={is480?"":Paper} 
+                        elevation={1}
+                        sx={{
+                          background: 'rgba(26, 26, 46, 0.85)',
+                          backdropFilter: 'blur(20px)',
+                          border: '1px solid rgba(139, 92, 246, 0.2)',
+                          borderRadius: 3,
+                          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+                        }}
+                      >
 
                           <ProductCard item key={item._id} brand={item.product.brand.name} id={item.product._id} price={item.product.price} stockQuantity={item.product.stockQuantity} thumbnail={item.product.thumbnail} title={item.product.title} handleAddRemoveFromWishlist={handleAddRemoveFromWishlist} isWishlistCard={true}/>
                         
@@ -177,8 +346,25 @@ export const Wishlist = () => {
 
                           {/* note heading and icon */}
                           <Stack flexDirection={'row'} alignItems={'center'}>
-                            <Typography variant='h6' fontWeight={400}>Note</Typography>
-                            <IconButton onClick={()=>handleEdit(index)} ><EditOutlinedIcon/></IconButton>
+                            <Typography 
+                              variant='h6' 
+                              fontWeight={400}
+                              sx={{ color: '#FFFFFF' }}
+                            >
+                              Note
+                            </Typography>
+                            <IconButton 
+                              onClick={()=>handleEdit(index)}
+                              sx={{
+                                color: '#8B5CF6',
+                                '&:hover': {
+                                  color: '#A78BFA',
+                                  transform: 'scale(1.1)',
+                                }
+                              }}
+                            >
+                              <EditOutlinedIcon/>
+                            </IconButton>
                           </Stack>
 
                           {
@@ -186,23 +372,119 @@ export const Wishlist = () => {
 
                               <Stack rowGap={2}>
                                 
-                                <TextField multiline rows={4} value={editValue} onChange={(e)=>setEditValue(e.target.value)}/>
+                                <TextField 
+                                  multiline 
+                                  rows={4} 
+                                  value={editValue} 
+                                  onChange={(e)=>setEditValue(e.target.value)}
+                                  sx={{
+                                    '& .MuiOutlinedInput-root': {
+                                      borderRadius: 2,
+                                      background: 'rgba(15, 15, 35, 0.6)',
+                                      backdropFilter: 'blur(10px)',
+                                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                                      '&:hover .MuiOutlinedInput-notchedOutline': {
+                                        borderColor: '#8B5CF6',
+                                      },
+                                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                        borderColor: '#8B5CF6',
+                                        borderWidth: 2,
+                                      },
+                                      '& .MuiInputBase-input': {
+                                        color: '#FFFFFF',
+                                      },
+                                      '& .MuiInputBase-input::placeholder': {
+                                        color: '#94A3B8',
+                                      },
+                                    },
+                                  }}
+                                />
                                 
                                 <Stack flexDirection={'row'} alignSelf={'flex-end'} columnGap={1}>
-                                    <Button onClick={()=>handleNoteUpdate(item._id)} size='small' variant='contained'>Update</Button>
-                                    <Button onClick={()=>setEditIndex(-1)} size='small' variant='outlined' color='error'>Cancel</Button>
+                                    <Button 
+                                      onClick={()=>handleNoteUpdate(item._id)} 
+                                      size='small' 
+                                      variant='contained'
+                                      sx={{
+                                        background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
+                                        '&:hover': {
+                                          background: 'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%)',
+                                        }
+                                      }}
+                                    >
+                                      Update
+                                    </Button>
+                                    <Button 
+                                      onClick={()=>setEditIndex(-1)} 
+                                      size='small' 
+                                      variant='outlined' 
+                                      color='error'
+                                      sx={{
+                                        borderColor: '#EF4444',
+                                        color: '#EF4444',
+                                        '&:hover': {
+                                          borderColor: '#F87171',
+                                          color: '#F87171',
+                                          background: 'rgba(239, 68, 68, 0.1)',
+                                        }
+                                      }}
+                                    >
+                                      Cancel
+                                    </Button>
                                 </Stack>
 
                               </Stack>
                             ):
                             <Box>
-                              <Typography sx={{wordWrap:"break-word",color:item.note?'text.primary':'GrayText'}}>{item.note?item.note:"Add a custom note here"}</Typography>
+                              <Typography 
+                                sx={{
+                                  wordWrap:"break-word",
+                                  color: item.note ? '#E0E7FF' : '#94A3B8'
+                                }}
+                              >
+                                {item.note ? item.note : "Add a custom note here"}
+                              </Typography>
                             </Box>
                           }
 
                           {
                             cartItems.some((cartItem)=>cartItem.product._id===item.product._id)?
-                            <Button sx={{mt:4}} size='small' variant='outlined' component={Link} to={'/cart'}>Already in cart</Button>:<Button sx={{mt:4}} size='small' onClick={()=>handleAddToCart(item.product._id)} variant='outlined'>Add To Cart</Button>
+                            <Button 
+                              sx={{mt:4}} 
+                              size='small' 
+                              variant='outlined' 
+                              component={Link} 
+                              to={'/cart'}
+                              sx={{
+                                borderColor: '#10B981',
+                                color: '#10B981',
+                                '&:hover': {
+                                  borderColor: '#34D399',
+                                  color: '#34D399',
+                                  background: 'rgba(16, 185, 129, 0.1)',
+                                }
+                              }}
+                            >
+                              Already in cart
+                            </Button>
+                            :
+                            <Button 
+                              sx={{mt:4}} 
+                              size='small' 
+                              onClick={()=>handleAddToCart(item.product._id)} 
+                              variant='outlined'
+                              sx={{
+                                borderColor: '#8B5CF6',
+                                color: '#8B5CF6',
+                                '&:hover': {
+                                  borderColor: '#A78BFA',
+                                  color: '#A78BFA',
+                                  background: 'rgba(139, 92, 246, 0.1)',
+                                }
+                              }}
+                            >
+                              Add To Cart
+                            </Button>
                           }
                           
                           
