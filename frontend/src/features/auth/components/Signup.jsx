@@ -41,7 +41,7 @@ export const Signup = () => {
 
   
   useEffect(()=>{
-    if(status==='fullfilled'){
+    if(status==='fulfilled'){
       toast.success("Welcome! Verify your email to start shopping on NovaMart.")
       reset()
     }

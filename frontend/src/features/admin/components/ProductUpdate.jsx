@@ -31,7 +31,7 @@ export const ProductUpdate = () => {
     },[id])
 
     useEffect(()=>{
-        if(productUpdateStatus==='fullfilled'){
+        if(productUpdateStatus==='fulfilled'){
             toast.success("Product Updated")
             navigate("/admin/dashboard")
         }

@@ -138,7 +138,7 @@ const authSlice=createSlice({
                 state.signupStatus='pending'
             })
             .addCase(signupAsync.fulfilled,(state,action)=>{
-                state.signupStatus='fullfilled'
+                state.signupStatus='fulfilled'
                 state.loggedInUser=action.payload
                 // Store token in localStorage
                 if (action.payload.token) {
@@ -154,7 +154,7 @@ const authSlice=createSlice({
                 state.loginStatus='pending'
             })
             .addCase(loginAsync.fulfilled,(state,action)=>{
-                state.loginStatus='fullfilled'
+                state.loginStatus='fulfilled'
                 state.loggedInUser=action.payload
                 // Store token in localStorage
                 if (action.payload.token) {
@@ -170,7 +170,7 @@ const authSlice=createSlice({
                 state.otpVerificationStatus='pending'
             })
             .addCase(verifyOtpAsync.fulfilled,(state,action)=>{
-                state.otpVerificationStatus='fullfilled'
+                state.otpVerificationStatus='fulfilled'
                 state.loggedInUser=action.payload
             })
             .addCase(verifyOtpAsync.rejected,(state,action)=>{
@@ -182,7 +182,7 @@ const authSlice=createSlice({
                 state.resendOtpStatus='pending'
             })
             .addCase(resendOtpAsync.fulfilled,(state,action)=>{
-                state.resendOtpStatus='fullfilled'
+                state.resendOtpStatus='fulfilled'
                 state.resendOtpSuccessMessage=action.payload
             })
             .addCase(resendOtpAsync.rejected,(state,action)=>{
@@ -194,7 +194,7 @@ const authSlice=createSlice({
                 state.forgotPasswordStatus='pending'
             })
             .addCase(forgotPasswordAsync.fulfilled,(state,action)=>{
-                state.forgotPasswordStatus='fullfilled'
+                state.forgotPasswordStatus='fulfilled'
                 state.forgotPasswordSuccessMessage=action.payload
             })
             .addCase(forgotPasswordAsync.rejected,(state,action)=>{
@@ -206,7 +206,7 @@ const authSlice=createSlice({
                 state.resetPasswordStatus='pending'
             })
             .addCase(resetPasswordAsync.fulfilled,(state,action)=>{
-                state.resetPasswordStatus='fullfilled'
+                state.resetPasswordStatus='fulfilled'
                 state.resetPasswordSuccessMessage=action.payload
             })
             .addCase(resetPasswordAsync.rejected,(state,action)=>{
@@ -218,7 +218,7 @@ const authSlice=createSlice({
                 state.status='pending'
             })
             .addCase(logoutAsync.fulfilled,(state)=>{
-                state.status='fullfilled'
+                state.status='fulfilled'
                 state.loggedInUser=null
                 // Clear token from localStorage
                 localStorage.removeItem('authToken')
@@ -232,7 +232,7 @@ const authSlice=createSlice({
                 state.status='pending'
             })
             .addCase(checkAuthAsync.fulfilled,(state,action)=>{
-                state.status='fullfilled'
+                state.status='fulfilled'
                 state.loggedInUser=action.payload
                 state.isAuthChecked=true
             })
